@@ -44,7 +44,7 @@
       href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Manrope:wght@400;500;600;700&display=swap"
     />
     <style>
-      /* Layout: one centred column (max 680px). Lesson chips and mode on top, one flip card as the hero, two answer buttons; Exercises tab with six self-checks; settings and progress code at the bottom. Palette: cream, dusty pink, chocolate, blue-grey. */
+      /* Layout: one centred column (max 680px). Lesson chips and mode on top, one flip card as the hero, two answer buttons; Exercises tab with eight self-checks; settings and progress code at the bottom. Palette: cream, dusty pink, chocolate, blue-grey. */
       :root {
         --bg: #f5ede3;
         --surface: #fffaf4;
@@ -629,16 +629,16 @@
 
       .ex-tabs {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(4, 1fr);
         gap: 6px;
       }
       .ex-tab {
         border: 1px solid var(--line);
         background: var(--surface);
         border-radius: 12px;
-        padding: 10px 6px;
+        padding: 10px 4px;
         font-weight: 700;
-        font-size: 13px;
+        font-size: 12.5px;
         color: var(--muted);
         display: flex;
         flex-direction: column;
@@ -989,12 +989,78 @@
         color: var(--bad);
         border-color: var(--bad);
       }
+      .fx-sent {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        font-size: 18px;
+      }
+      .fx-part {
+        border: 1.5px dashed var(--line);
+        background: var(--surface);
+        color: var(--ink);
+        border-radius: 10px;
+        padding: 6px 10px;
+        font-weight: 600;
+        text-align: left;
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
+      .fx-part:hover {
+        border-color: var(--blue);
+      }
+      .fx-part:disabled {
+        cursor: default;
+      }
+      .fx-part.miss {
+        border-style: solid;
+        border-color: var(--line);
+        opacity: 0.55;
+        animation: shake 0.35s;
+      }
+      .fx-part.hl {
+        border-style: solid;
+        border-color: var(--blue);
+        background: var(--blue-soft);
+        color: var(--blue-ink);
+      }
+      .fx-part.found {
+        border-style: solid;
+        border-color: var(--bad);
+        background: var(--bad-soft);
+        color: var(--bad);
+        text-decoration: line-through;
+      }
+      .fx-part.fixed {
+        text-decoration: none;
+        border-style: solid;
+        border-color: var(--good);
+        background: var(--good-soft);
+        color: var(--good);
+      }
+      .sit-box {
+        background: var(--surface-2);
+        border-radius: 16px;
+        padding: 16px 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .sit-text {
+        font-family: var(--display);
+        font-weight: 700;
+        font-size: clamp(19px, 4.6vw, 23px);
+        line-height: 1.3;
+        margin: 0;
+        text-wrap: pretty;
+      }
       @media (prefers-reduced-motion: reduce) {
         .card,
         .bar i {
           transition: none;
         }
-        .m.no {
+        .m.no,
+        .fx-part.miss {
           animation: none;
         }
       }
@@ -1106,7 +1172,7 @@
     </div>
 
     <script>
-      /* ============ ДАНІ: доповнюй ці три списки ============ */
+      /* ============ ДАНІ: доповнюй ці списки ============ */
       /* DATA START */
       const CARDS = [
         {
@@ -1117,6 +1183,7 @@
           ans: "choir",
           col: ["join a choir", "church choir", "choir practice"],
           dict: "choir",
+          kind: "R",
         },
         {
           lesson: "Lesson 1",
@@ -1126,6 +1193,7 @@
           ans: "excerpt",
           col: ["an excerpt from", "read an excerpt", "a short excerpt"],
           dict: "excerpt",
+          kind: "R",
         },
         {
           lesson: "Lesson 1",
@@ -1135,6 +1203,7 @@
           ans: "set",
           col: ["play a set", "a live set", "a set list"],
           dict: "set",
+          kind: "R",
         },
         {
           lesson: "Lesson 1",
@@ -1144,6 +1213,7 @@
           ans: "way",
           col: ["on the way home", "on the way back", "on the way there"],
           dict: "way",
+          kind: "F",
         },
         {
           lesson: "Lesson 1",
@@ -1153,6 +1223,7 @@
           ans: "perform",
           col: ["perform a play", "perform well", "perform an operation"],
           dict: "perform",
+          kind: "D",
         },
         {
           lesson: "Lesson 1",
@@ -1162,6 +1233,7 @@
           ans: "excursion",
           col: ["go on an excursion", "a day excursion", "a school excursion"],
           dict: "excursion",
+          kind: "R",
         },
         {
           lesson: "Lesson 1",
@@ -1171,6 +1243,7 @@
           ans: "overnight",
           col: ["overnight stay", "overnight bag", "overnight train"],
           dict: "overnight",
+          kind: "R",
         },
         {
           lesson: "Lesson 1",
@@ -1180,6 +1253,7 @@
           ans: "violent",
           col: ["violent crime", "violent behaviour", "a violent death"],
           dict: "violent",
+          kind: "R",
         },
         {
           lesson: "Lesson 1",
@@ -1189,6 +1263,7 @@
           ans: "weapon",
           col: ["carry a weapon", "a deadly weapon", "nuclear weapons"],
           dict: "weapon",
+          kind: "R",
         },
         {
           lesson: "Lesson 1",
@@ -1198,6 +1273,7 @@
           ans: "harm",
           col: ["do no harm", "cause harm", "mean no harm"],
           dict: "harm",
+          kind: "D",
         },
         {
           lesson: "Lesson 1",
@@ -1207,6 +1283,7 @@
           ans: "dumb",
           col: ["a dumb question", "a dumb idea", "dumb luck"],
           dict: "dumb",
+          kind: "R",
         },
         {
           lesson: "Lesson 1",
@@ -1216,6 +1293,7 @@
           ans: "pass",
           col: ["pass a law", "pass a bill", "pass legislation"],
           dict: "pass",
+          kind: "D",
         },
         {
           lesson: "Lesson 1",
@@ -1225,6 +1303,7 @@
           ans: "freedom",
           col: ["freedom of speech", "personal freedom", "lose your freedom"],
           dict: "freedom",
+          kind: "D",
         },
         {
           lesson: "Lesson 1",
@@ -1234,6 +1313,7 @@
           ans: "ignorance",
           col: ["out of ignorance", "pure ignorance", "ignorance of the law"],
           dict: "ignorance",
+          kind: "R",
         },
         {
           lesson: "Lesson 1",
@@ -1243,6 +1323,7 @@
           ans: "access",
           col: ["easy access", "restrict access", "have access to"],
           dict: "access",
+          kind: "R",
         },
         {
           lesson: "Lesson 1",
@@ -1252,6 +1333,7 @@
           ans: "witness",
           col: ["witness a crime", "witness an accident", "a key witness"],
           dict: "witness",
+          kind: "D",
         },
         {
           lesson: "Lesson 1",
@@ -1261,6 +1343,7 @@
           ans: "peers",
           col: ["peer pressure", "peer group", "among your peers"],
           dict: "peer",
+          kind: "R",
         },
         {
           lesson: "Lesson 1",
@@ -1274,6 +1357,7 @@
             "strictly controlled",
           ],
           dict: "strictly",
+          kind: "O",
         },
         {
           lesson: "Lesson 1",
@@ -1283,6 +1367,7 @@
           ans: "citizen",
           col: ["a British citizen", "a law-abiding citizen", "senior citizen"],
           dict: "citizen",
+          kind: "R",
         },
         {
           lesson: "Lesson 1",
@@ -1292,6 +1377,7 @@
           ans: "healthcare",
           col: ["public healthcare", "healthcare system", "healthcare workers"],
           dict: "healthcare",
+          kind: "R",
         },
         {
           lesson: "Lesson 1",
@@ -1305,6 +1391,7 @@
             "a reasonable person",
           ],
           dict: "reasonable",
+          kind: "R",
         },
         {
           lesson: "Lesson 1",
@@ -1318,6 +1405,7 @@
             "compulsory military service",
           ],
           dict: "compulsory",
+          kind: "R",
         },
         {
           lesson: "Lesson 1",
@@ -1327,6 +1415,7 @@
           ans: "to blame",
           col: ["be to blame for", "partly to blame", "largely to blame"],
           dict: "blame",
+          kind: "O",
         },
         {
           lesson: "Lesson 1",
@@ -1336,6 +1425,7 @@
           ans: "decrease",
           col: ["decrease sharply", "a decrease in", "decrease the risk"],
           dict: "decrease",
+          kind: "D",
         },
         {
           lesson: "Lesson 1",
@@ -1345,6 +1435,7 @@
           ans: "release",
           col: ["release tension", "release stress", "release a statement"],
           dict: "release",
+          kind: "D",
         },
         {
           lesson: "Lesson 1",
@@ -1358,6 +1449,7 @@
             "hold sb's attention",
           ],
           dict: "span",
+          kind: "R",
         },
         {
           lesson: "Lesson 1",
@@ -1371,6 +1463,7 @@
             "foster a sense of",
           ],
           dict: "foster",
+          kind: "D",
         },
         {
           lesson: "Lesson 1",
@@ -1380,6 +1473,7 @@
           ans: "ban",
           col: ["a ban on", "impose a ban", "lift a ban"],
           dict: "ban",
+          kind: "R",
         },
         {
           lesson: "Lesson 1",
@@ -1389,6 +1483,7 @@
           ans: "bond",
           col: ["a strong bond", "form a bond", "a family bond"],
           dict: "bond",
+          kind: "R",
         },
         {
           lesson: "Lesson 1",
@@ -1398,6 +1493,7 @@
           ans: "solution",
           col: ["find a solution", "a practical solution", "a quick solution"],
           dict: "solution",
+          kind: "R",
         },
         {
           lesson: "Lesson 2",
@@ -1407,6 +1503,7 @@
           ans: "delicious",
           col: ["absolutely delicious", "smell delicious", "look delicious"],
           dict: "delicious",
+          kind: "O",
         },
         {
           lesson: "Lesson 2",
@@ -1416,6 +1513,7 @@
           ans: "tasty",
           col: ["tasty food", "a tasty snack", "a tasty dish"],
           dict: "tasty",
+          kind: "O",
         },
         {
           lesson: "Lesson 2",
@@ -1425,6 +1523,7 @@
           ans: "terrible",
           col: ["terrible weather", "feel terrible", "a terrible mistake"],
           dict: "terrible",
+          kind: "O",
         },
         {
           lesson: "Lesson 2",
@@ -1438,6 +1537,7 @@
             "an incredible experience",
           ],
           dict: "incredible",
+          kind: "O",
         },
         {
           lesson: "Lesson 2",
@@ -1447,6 +1547,7 @@
           ans: "disgusting",
           col: ["taste disgusting", "smell disgusting", "a disgusting habit"],
           dict: "disgusting",
+          kind: "O",
         },
         {
           lesson: "Lesson 2",
@@ -1456,6 +1557,7 @@
           ans: "stunning",
           col: ["a stunning view", "look stunning", "stunning scenery"],
           dict: "stunning",
+          kind: "O",
         },
         {
           lesson: "Lesson 2",
@@ -1469,6 +1571,7 @@
             "physically exhausted",
           ],
           dict: "exhausted",
+          kind: "O",
         },
         {
           lesson: "Lesson 2",
@@ -1478,6 +1581,7 @@
           ans: "fresh",
           col: ["fresh bread", "fresh air", "smell fresh"],
           dict: "fresh",
+          kind: "O",
         },
         {
           lesson: "Lesson 2",
@@ -1487,6 +1591,7 @@
           ans: "blocked",
           col: ["have a blocked nose", "a blocked drain", "a blocked road"],
           dict: "blocked",
+          kind: "R",
         },
         {
           lesson: "Lesson 2",
@@ -1496,6 +1601,7 @@
           ans: "rude",
           col: ["rude to", "a rude comment", "a rude waiter"],
           dict: "rude",
+          kind: "O",
         },
         {
           lesson: "Lesson 2",
@@ -1505,6 +1611,7 @@
           ans: "dangerous",
           col: ["a dangerous driver", "highly dangerous", "dangerous for"],
           dict: "dangerous",
+          kind: "O",
         },
         {
           lesson: "Lesson 2",
@@ -1514,6 +1621,7 @@
           ans: "genuine",
           col: ["genuine leather", "a genuine smile", "a genuine mistake"],
           dict: "genuine",
+          kind: "O",
         },
         {
           lesson: "Lesson 2",
@@ -1523,6 +1631,7 @@
           ans: "huge",
           col: ["a huge success", "a huge crowd", "a huge difference"],
           dict: "huge",
+          kind: "R",
         },
         {
           lesson: "Lesson 2",
@@ -1532,6 +1641,7 @@
           ans: "dish",
           col: ["a main dish", "a side dish", "a vegetarian dish"],
           dict: "dish",
+          kind: "R",
         },
         {
           lesson: "Lesson 2",
@@ -1541,6 +1651,7 @@
           ans: "sauce",
           col: ["tomato sauce", "soy sauce", "a spicy sauce"],
           dict: "sauce",
+          kind: "R",
         },
         {
           lesson: "Lesson 2",
@@ -1550,6 +1661,7 @@
           ans: "flavor",
           col: ["a strong flavor", "add flavor", "a new flavor"],
           dict: "flavour",
+          kind: "R",
         },
         {
           lesson: "Lesson 2",
@@ -1559,6 +1671,7 @@
           ans: "soup",
           col: ["vegetable soup", "a bowl of soup", "chicken soup"],
           dict: "soup",
+          kind: "R",
         },
         {
           lesson: "Lesson 2",
@@ -1568,6 +1681,7 @@
           ans: "yogurt",
           col: ["plain yogurt", "Greek yogurt", "frozen yogurt"],
           dict: "yogurt",
+          kind: "R",
         },
         {
           lesson: "Lesson 2",
@@ -1577,6 +1691,7 @@
           ans: "chickpeas",
           col: ["a can of chickpeas", "roasted chickpeas", "chickpea salad"],
           dict: "chickpea",
+          kind: "R",
         },
         {
           lesson: "Lesson 2",
@@ -1586,6 +1701,7 @@
           ans: "pizza",
           col: ["order a pizza", "a slice of pizza", "a frozen pizza"],
           dict: "pizza",
+          kind: "R",
         },
         {
           lesson: "Lesson 2",
@@ -1596,6 +1712,7 @@
           col: ["taste the soup", "taste good", "taste of garlic"],
           dict: "taste",
           say: "taste a dish",
+          kind: "D",
         },
         {
           lesson: "Lesson 2",
@@ -1605,6 +1722,7 @@
           ans: "garnish",
           col: ["as a garnish", "a simple garnish", "garnish with"],
           dict: "garnish",
+          kind: "R",
         },
         {
           lesson: "Lesson 2",
@@ -1614,6 +1732,7 @@
           ans: "wedge",
           col: ["a lime wedge", "a lemon wedge", "a wedge of cheese"],
           dict: "wedge",
+          kind: "R",
         },
         {
           lesson: "Lesson 2",
@@ -1623,6 +1742,7 @@
           ans: "sprinkle",
           col: ["sprinkle with", "sprinkle on top", "a sprinkle of"],
           dict: "sprinkle",
+          kind: "D",
         },
         {
           lesson: "Lesson 2",
@@ -1632,6 +1752,7 @@
           ans: "parsley",
           col: ["fresh parsley", "chopped parsley", "a sprig of parsley"],
           dict: "parsley",
+          kind: "R",
         },
         {
           lesson: "Lesson 2",
@@ -1641,6 +1762,7 @@
           ans: "chives",
           col: ["chopped chives", "fresh chives", "sour cream and chives"],
           dict: "chives",
+          kind: "R",
         },
         {
           lesson: "Lesson 2",
@@ -1650,6 +1772,7 @@
           ans: "mint",
           col: ["fresh mint", "mint tea", "a mint leaf"],
           dict: "mint",
+          kind: "R",
         },
         {
           lesson: "Lesson 2",
@@ -1659,6 +1782,7 @@
           ans: "serve",
           col: ["serve dinner", "serve a drink", "serve customers"],
           dict: "serve",
+          kind: "D",
         },
         {
           lesson: "Lesson 2",
@@ -1668,6 +1792,7 @@
           ans: "cooked",
           col: ["freshly cooked", "home-cooked", "well cooked"],
           dict: "cook",
+          kind: "D",
         },
         {
           lesson: "Lesson 2",
@@ -1677,6 +1802,7 @@
           ans: "ordered",
           col: ["order online", "order a drink", "order food"],
           dict: "order",
+          kind: "D",
         },
         {
           lesson: "Lesson 2",
@@ -1686,6 +1812,7 @@
           ans: "appetizing",
           col: ["look appetizing", "smell appetizing", "not very appetizing"],
           dict: "appetizing",
+          kind: "O",
         },
         {
           lesson: "Lesson 2",
@@ -1695,6 +1822,7 @@
           ans: "appealing",
           col: ["visually appealing", "appeal to", "not appealing"],
           dict: "appealing",
+          kind: "O",
         },
         {
           lesson: "Lesson 2",
@@ -1708,6 +1836,7 @@
             "look mouth-watering",
           ],
           dict: "mouth-watering",
+          kind: "O",
         },
         {
           lesson: "Lesson 2",
@@ -1717,6 +1846,7 @@
           ans: "spicy",
           col: ["spicy food", "a spicy sauce", "too spicy"],
           dict: "spicy",
+          kind: "O",
         },
         {
           lesson: "Lesson 2",
@@ -1726,6 +1856,7 @@
           ans: "bitter",
           col: ["a bitter taste", "taste bitter", "bitter chocolate"],
           dict: "bitter",
+          kind: "O",
         },
         {
           lesson: "Lesson 2",
@@ -1739,6 +1870,7 @@
             "bitter-sweet memories",
           ],
           dict: "bittersweet",
+          kind: "O",
         },
         {
           lesson: "Lesson 2",
@@ -1748,6 +1880,7 @@
           ans: "crunchy",
           col: ["a crunchy salad", "a crunchy apple", "crunchy peanut butter"],
           dict: "crunchy",
+          kind: "O",
         },
         {
           lesson: "Lesson 2",
@@ -1757,6 +1890,7 @@
           ans: "crumbly",
           col: ["crumbly cheese", "a crumbly texture", "crumbly biscuits"],
           dict: "crumbly",
+          kind: "O",
         },
         {
           lesson: "Lesson 2",
@@ -1766,6 +1900,7 @@
           ans: "smooth",
           col: ["smooth soup", "smooth skin", "a smooth surface"],
           dict: "smooth",
+          kind: "O",
         },
         {
           lesson: "Lesson 2",
@@ -1775,6 +1910,7 @@
           ans: "healthy",
           col: ["a healthy diet", "healthy food", "stay healthy"],
           dict: "healthy",
+          kind: "O",
         },
         {
           lesson: "Lesson 2",
@@ -1784,6 +1920,7 @@
           ans: "exotic",
           col: ["exotic fruit", "an exotic place", "exotic spices"],
           dict: "exotic",
+          kind: "O",
         },
         {
           lesson: "Lesson 2",
@@ -1797,6 +1934,7 @@
             "an award-winning author",
           ],
           dict: "award-winning",
+          kind: "O",
         },
       ];
 
@@ -1859,77 +1997,1603 @@
         },
       ];
 
-      const SORTS = [
+      /* FIXES: по одному реченню на кожну фразу уроку. bad: номер частини з помилкою (з 1), fix: правильні варіанти цієї частини. */
+      const FIXES = [
         {
           lesson: "Lesson 1",
-          title: "Розклади фрази за темою",
-          cats: {
-            "Музика й подорожі": [
-              "a choir",
-              "a set of songs",
-              "to perform",
-              "an excursion",
-              "overnight trip",
-              "on the way to Paris",
-            ],
-            "Насильство й зброя": [
-              "violent species",
-              "weapon",
-              "witness violence",
-              "violent peers",
-              "access to weapons",
-            ],
-            "Закони й суспільство": [
-              "pass laws",
-              "strictly regulated",
-              "a citizen",
-              "compulsory insurance",
-              "ban",
-              "healthcare",
-            ],
-            "Емоції й розвиток": [
-              "decrease aggression",
-              "release anger",
-              "attention span",
-              "foster development",
-              "bond",
-            ],
-          },
+          en: "a choir",
+          parts: ["She has sung", "on", "a choir", "since she was ten."],
+          bad: 2,
+          fix: ["in"],
+          why: "Співати в хорі: sing in a choir, а не on.",
+        },
+        {
+          lesson: "Lesson 1",
+          en: "an excerpt",
+          parts: ["We read", "a excerpt", "from the novel", "in class."],
+          bad: 2,
+          fix: ["an excerpt"],
+          why: "Перед голосним звуком ставимо an: an excerpt.",
+        },
+        {
+          lesson: "Lesson 1",
+          en: "a set of songs",
+          parts: [
+            "The band",
+            "play",
+            "a set of songs",
+            "at the festival yesterday.",
+          ],
+          bad: 2,
+          fix: ["played"],
+          why: "Yesterday означає минулий час: played.",
+        },
+        {
+          lesson: "Lesson 1",
+          en: "on the way to Paris",
+          parts: ["We stopped", "in the way", "to Paris", "for coffee."],
+          bad: 2,
+          fix: ["on the way"],
+          why: "Усталений вираз: on the way to.",
+        },
+        {
+          lesson: "Lesson 1",
+          en: "to perform",
+          parts: ["The students", "will performing", "a play", "on Friday."],
+          bad: 2,
+          fix: ["will perform"],
+          why: "Після will стоїть інфінітив без to: will perform.",
+        },
+        {
+          lesson: "Lesson 1",
+          en: "an excursion",
+          parts: ["Our class", "went on", "a excursion", "to a castle."],
+          bad: 3,
+          fix: ["an excursion"],
+          why: "Перед голосним звуком ставимо an: an excursion.",
+        },
+        {
+          lesson: "Lesson 1",
+          en: "overnight trip",
+          parts: ["We took", "an overnight", "trips", "to the mountains."],
+          bad: 3,
+          fix: ["trip"],
+          why: "Після an потрібна однина: an overnight trip.",
+        },
+        {
+          lesson: "Lesson 1",
+          en: "violent species",
+          parts: [
+            "Some scientists think",
+            "that humans",
+            "is",
+            "a violent species.",
+          ],
+          bad: 3,
+          fix: ["are"],
+          why: "Humans у множині, тому дієслово are.",
+        },
+        {
+          lesson: "Lesson 1",
+          en: "weapon",
+          parts: ["The police", "found", "a weapons", "in the car."],
+          bad: 3,
+          fix: ["a weapon"],
+          why: "Після a стоїть однина: a weapon.",
+        },
+        {
+          lesson: "Lesson 1",
+          en: "do harm",
+          parts: ["Too much sugar", "can make", "harm", "to your teeth."],
+          bad: 2,
+          fix: ["can do"],
+          why: "Усталений вираз: do harm, а не make harm.",
+        },
+        {
+          lesson: "Lesson 1",
+          en: "dumb people",
+          parts: [
+            "It is rude",
+            "to call",
+            "dumb peoples",
+            "because of bad marks.",
+          ],
+          bad: 3,
+          fix: ["dumb people"],
+          why: "People вже множина, закінчення -s не потрібне.",
+        },
+        {
+          lesson: "Lesson 1",
+          en: "pass laws",
+          parts: [
+            "Parliament voted",
+            "to pass",
+            "a stricter laws",
+            "on knife crime.",
+          ],
+          bad: 3,
+          fix: ["stricter laws"],
+          why: "Laws у множині, артикль a не потрібен.",
+        },
+        {
+          lesson: "Lesson 1",
+          en: "take away freedom",
+          parts: [
+            "Critics say",
+            "the law",
+            "takes away",
+            "our freedom to speech.",
+          ],
+          bad: 4,
+          fix: ["our freedom of speech."],
+          why: "Усталений вираз: freedom of speech.",
+        },
+        {
+          lesson: "Lesson 1",
+          en: "ignorance",
+          parts: ["Many problems", "are caused", "by ignorant", "and fear."],
+          bad: 3,
+          fix: ["by ignorance"],
+          why: "Після by потрібен іменник: ignorance, а не ignorant.",
+        },
+        {
+          lesson: "Lesson 1",
+          en: "access to weapons",
+          parts: ["Easy", "access of", "weapons", "is dangerous."],
+          bad: 2,
+          fix: ["access to"],
+          why: "Після access ставимо to: access to weapons.",
+        },
+        {
+          lesson: "Lesson 1",
+          en: "witness violence",
+          parts: [
+            "Children",
+            "who witness",
+            "to violence",
+            "often feel afraid.",
+          ],
+          bad: 3,
+          fix: ["violence"],
+          why: "Witness без прийменника: witness violence.",
+        },
+        {
+          lesson: "Lesson 1",
+          en: "violent peers",
+          parts: [
+            "Teenagers with",
+            "violent peers",
+            "is",
+            "more likely to fight.",
+          ],
+          bad: 3,
+          fix: ["are"],
+          why: "Peers у множині, тому дієслово are.",
+        },
+        {
+          lesson: "Lesson 1",
+          en: "strictly regulated",
+          parts: ["In many countries", "alcohol", "is strict", "regulated."],
+          bad: 3,
+          fix: ["is strictly"],
+          why: "Перед дієприкметником потрібен прислівник: strictly regulated.",
+        },
+        {
+          lesson: "Lesson 1",
+          en: "a citizen",
+          parts: ["You must be", "citizen", "of the country", "to vote."],
+          bad: 2,
+          fix: ["a citizen"],
+          why: "Перед іменником в однині потрібен артикль: a citizen.",
+        },
+        {
+          lesson: "Lesson 1",
+          en: "healthcare",
+          parts: [
+            "Free healthcare",
+            "are",
+            "one of the main",
+            "promises of the party.",
+          ],
+          bad: 2,
+          fix: ["is"],
+          why: "Healthcare не рахується, тому дієслово is.",
+        },
+        {
+          lesson: "Lesson 1",
+          en: "reasonable price",
+          parts: ["We found a hotel", "at a", "reasonable", "prices."],
+          bad: 4,
+          fix: ["price."],
+          why: "Після a стоїть однина: a reasonable price.",
+        },
+        {
+          lesson: "Lesson 1",
+          en: "compulsory insurance",
+          parts: ["Car insurance", "is", "compulsive", "in most countries."],
+          bad: 3,
+          fix: ["compulsory"],
+          why: "Compulsive означає нав'язливий. Обов'язковий: compulsory.",
+        },
+        {
+          lesson: "Lesson 1",
+          en: "to blame",
+          parts: ["Nobody", "was", "blame", "for the accident."],
+          bad: 3,
+          fix: ["to blame"],
+          why: "Усталений вираз: be to blame for.",
+        },
+        {
+          lesson: "Lesson 1",
+          en: "decrease aggression",
+          parts: ["Exercise", "can help", "to decreasing", "aggression."],
+          bad: 3,
+          fix: ["to decrease"],
+          why: "Після to стоїть інфінітив: to decrease.",
+        },
+        {
+          lesson: "Lesson 1",
+          en: "release anger",
+          parts: ["Some people", "go running", "for release", "anger."],
+          bad: 3,
+          fix: ["to release"],
+          why: "Мета дії виражається через to + інфінітив: to release anger.",
+        },
+        {
+          lesson: "Lesson 1",
+          en: "attention span",
+          parts: ["Young children", "have", "a short", "attention long."],
+          bad: 4,
+          fix: ["attention span."],
+          why: "Усталений вираз: attention span.",
+        },
+        {
+          lesson: "Lesson 1",
+          en: "foster development",
+          parts: [
+            "Team sports",
+            "can fostering",
+            "development",
+            "in young people.",
+          ],
+          bad: 2,
+          fix: ["can foster"],
+          why: "Після can стоїть інфінітив: can foster.",
+        },
+        {
+          lesson: "Lesson 1",
+          en: "ban",
+          parts: ["The government", "introduced", "a ban of", "plastic bags."],
+          bad: 3,
+          fix: ["a ban on"],
+          why: "Після ban ставимо on: a ban on.",
+        },
+        {
+          lesson: "Lesson 1",
+          en: "bond",
+          parts: [
+            "The trip created",
+            "a strong",
+            "bound",
+            "between the friends.",
+          ],
+          bad: 3,
+          fix: ["bond"],
+          why: "Bound це форма дієслова bind. Іменник: bond.",
+        },
+        {
+          lesson: "Lesson 1",
+          en: "possible solution",
+          parts: [
+            "One possible",
+            "solve",
+            "is to limit",
+            "cars in the centre.",
+          ],
+          bad: 2,
+          fix: ["solution"],
+          why: "Потрібен іменник solution, а не дієслово solve.",
         },
         {
           lesson: "Lesson 2",
-          title: "Розклади слова за темою",
-          cats: {
-            "Позитивне враження": [
-              "delicious",
-              "tasty",
-              "incredible",
-              "stunning",
-              "mouth-watering",
-              "appealing",
-            ],
-            "Негативне враження": [
-              "terrible",
-              "disgusting",
-              "rude",
-              "dangerous",
-            ],
-            "Смак і текстура": [
-              "spicy",
-              "bitter",
-              "crunchy",
-              "crumbly",
-              "smooth",
-            ],
-            "Трави й подача страви": [
-              "parsley",
-              "chives",
-              "mint",
-              "garnish",
-              "wedge",
-              "sprinkle",
-            ],
-          },
+          en: "delicious",
+          parts: ["The soup", "was absolutely", "deliciously", "and warm."],
+          bad: 3,
+          fix: ["delicious"],
+          why: "Після was потрібен прикметник: delicious.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "tasty",
+          parts: ["It is simple", "but", "really", "taste."],
+          bad: 4,
+          fix: ["tasty."],
+          why: "Потрібен прикметник tasty, а не дієслово taste.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "terrible",
+          parts: ["After the trip", "I felt", "terribly", "and went to bed."],
+          bad: 3,
+          fix: ["terrible"],
+          why: "Після felt потрібен прикметник: felt terrible.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "incredible",
+          parts: ["The view", "from the top", "was", "incredibly."],
+          bad: 4,
+          fix: ["incredible."],
+          why: "Після was потрібен прикметник: incredible.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "disgusting",
+          parts: ["The milk", "smelled", "disgust", "after three days."],
+          bad: 3,
+          fix: ["disgusting"],
+          why: "Disgust це іменник. Прикметник: disgusting.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "stunning",
+          parts: ["She wore", "a stunning", "dress", "in the wedding."],
+          bad: 4,
+          fix: ["at the wedding."],
+          why: "Захід: at the wedding.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "exhausted",
+          parts: ["After the flight", "we were", "completely", "exhausting."],
+          bad: 4,
+          fix: ["exhausted."],
+          why: "Ми втомлені: exhausted. Exhausting означає виснажливий.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "fresh",
+          parts: ["I love", "the smell", "of fresh", "breads."],
+          bad: 4,
+          fix: ["bread."],
+          why: "Bread не рахується, закінчення -s не потрібне.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "blocked nose",
+          parts: [
+            "I can't taste",
+            "anything because",
+            "I have",
+            "blocked nose.",
+          ],
+          bad: 4,
+          fix: ["a blocked nose."],
+          why: "Потрібен артикль: a blocked nose.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "rude",
+          parts: ["It is", "rude", "talk", "with your mouth full."],
+          bad: 3,
+          fix: ["to talk"],
+          why: "Після rude потрібен to + інфінітив: rude to talk.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "dangerous",
+          parts: ["It is", "dangerous", "to swimming", "here."],
+          bad: 3,
+          fix: ["to swim"],
+          why: "Після to стоїть інфінітив: to swim.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "genuine",
+          parts: ["This jacket", "is made", "of genuine", "leathers."],
+          bad: 4,
+          fix: ["leather."],
+          why: "Leather не рахується, закінчення -s не потрібне.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "huge success",
+          parts: [
+            "The new restaurant",
+            "was",
+            "an huge success",
+            "from the first week.",
+          ],
+          bad: 3,
+          fix: ["a huge success"],
+          why: "Huge починається з приголосного звуку, тому a, а не an.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "dish",
+          parts: ["Chicken pesto", "is", "my favourite", "pasta dishes."],
+          bad: 4,
+          fix: ["pasta dish."],
+          why: "Одна страва: my favourite pasta dish.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "sauce",
+          parts: ["The pasta", "comes with", "a creamy", "mushroom sauces."],
+          bad: 4,
+          fix: ["mushroom sauce."],
+          why: "Після a стоїть однина: a creamy mushroom sauce.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "flavor",
+          parts: ["This ice cream", "has", "strong coffee", "flavor."],
+          bad: 3,
+          fix: ["a strong coffee"],
+          why: "Потрібен артикль: a strong coffee flavor.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "soup",
+          parts: ["In winter", "I often", "make", "a hot vegetables soup."],
+          bad: 4,
+          fix: ["a hot vegetable soup."],
+          why: "Іменник-означення стоїть в однині: vegetable soup.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "yogurt",
+          parts: ["I usually have", "yogurt", "with honey", "in breakfast."],
+          bad: 4,
+          fix: ["for breakfast."],
+          why: "Усталений вираз: for breakfast.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "chickpeas",
+          parts: [
+            "Hummus",
+            "is made",
+            "by chickpeas,",
+            "garlic and olive oil.",
+          ],
+          bad: 3,
+          fix: ["from chickpeas,"],
+          why: "Матеріал, з якого зроблено: made from.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "pizza",
+          parts: ["We shared", "a large", "pizza", "with a mushrooms."],
+          bad: 4,
+          fix: ["with mushrooms."],
+          why: "Mushrooms у множині, артикль a не потрібен.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "taste (a dish)",
+          parts: ["The chef", "came out", "to tasting", "every dish."],
+          bad: 3,
+          fix: ["to taste"],
+          why: "Після to стоїть інфінітив: to taste.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "garnish",
+          parts: ["The chef added", "a mint leaf", "like a", "garnish."],
+          bad: 3,
+          fix: ["as a"],
+          why: "У ролі прикраси: as a garnish.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "wedge",
+          parts: ["Add a", "lime", "wedge in", "the glass."],
+          bad: 3,
+          fix: ["wedge to"],
+          why: "Додати в склянку: add to the glass.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "sprinkle",
+          parts: ["Just", "sprinkling", "a little cheese", "on top."],
+          bad: 2,
+          fix: ["sprinkle"],
+          why: "У наказовому способі: just sprinkle.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "parsley",
+          parts: ["Sprinkle", "some", "chopped", "parsleys on the potatoes."],
+          bad: 4,
+          fix: ["parsley on the potatoes."],
+          why: "Parsley не рахується, закінчення -s не потрібне.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "chives",
+          parts: ["Add", "a few", "chopped", "chive to the eggs."],
+          bad: 4,
+          fix: ["chives to the eggs."],
+          why: "Після a few потрібна множина: chives.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "mint",
+          parts: ["Fresh", "mint tea", "are", "very popular in Morocco."],
+          bad: 3,
+          fix: ["is"],
+          why: "Mint tea в однині, тому дієслово is.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "serve",
+          parts: ["We usually", "serve", "the soup", "at fresh bread."],
+          bad: 4,
+          fix: ["with fresh bread."],
+          why: "Подавати з чимось: serve with.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "cooked",
+          parts: ["My brother", "cook", "a chicken pesto dish", "last night."],
+          bad: 2,
+          fix: ["cooked"],
+          why: "Last night означає минулий час: cooked.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "ordered",
+          parts: ["We", "ordering", "two pizzas", "and a salad."],
+          bad: 2,
+          fix: ["ordered"],
+          why: "Минулий час: ordered.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "appetizing",
+          parts: [
+            "The cake",
+            "looked",
+            "so appetite",
+            "that I wanted to try it.",
+          ],
+          bad: 3,
+          fix: ["so appetizing"],
+          why: "Appetite це іменник (апетит). Прикметник: appetizing.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "appealing",
+          parts: ["The menu", "is", "very", "appeal."],
+          bad: 4,
+          fix: ["appealing."],
+          why: "Потрібен прикметник: appealing.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "mouth-watering",
+          parts: ["The smell", "of fresh bread", "was", "mouth-watered."],
+          bad: 4,
+          fix: ["mouth-watering."],
+          why: "Прикметник закінчується на -ing: mouth-watering.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "spicy",
+          parts: ["I can't eat", "very", "spice", "food."],
+          bad: 3,
+          fix: ["spicy"],
+          why: "Потрібен прикметник spicy.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "bitter",
+          parts: ["Black coffee", "tastes", "too", "bitterly for me."],
+          bad: 4,
+          fix: ["bitter for me."],
+          why: "Після tastes потрібен прикметник: bitter.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "bitter-sweet",
+          parts: ["Dark chocolate", "has", "a", "bitter-sweets taste."],
+          bad: 4,
+          fix: ["bitter-sweet taste."],
+          why: "Означення не має закінчення -s.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "crunchy",
+          parts: ["I like", "salads", "with crunch", "vegetables."],
+          bad: 3,
+          fix: ["with crunchy"],
+          why: "Потрібен прикметник crunchy.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "crumbly",
+          parts: ["This crumbly", "cheese", "are", "perfect on a salad."],
+          bad: 3,
+          fix: ["is"],
+          why: "Cheese в однині, тому дієслово is.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "smooth",
+          parts: ["Blend", "the soup", "until it", "is smoothly."],
+          bad: 4,
+          fix: ["is smooth."],
+          why: "Після is потрібен прикметник: smooth.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "healthy",
+          parts: ["A", "health", "diet", "includes plenty of fruit."],
+          bad: 2,
+          fix: ["healthy"],
+          why: "Health це іменник. Прикметник: healthy.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "exotic",
+          parts: ["The market", "sells", "exotics", "fruits."],
+          bad: 3,
+          fix: ["exotic"],
+          why: "Прикметник не має закінчення -s: exotic fruits.",
+        },
+        {
+          lesson: "Lesson 2",
+          en: "award-winning",
+          parts: [
+            "We had dinner",
+            "at",
+            "an award-won",
+            "restaurant in Lisbon.",
+          ],
+          bad: 3,
+          fix: ["an award-winning"],
+          why: "Відзначений нагородами: award-winning.",
+        },
+      ];
+
+      /* SITS: по одній ситуації на кожну фразу уроку. opts: 4 репліки разом з правильною (ok). */
+      const SITS = [
+        {
+          lesson: "Lesson 1",
+          en: "a choir",
+          sit: "Your friend asks what you do on Tuesday evenings.",
+          uk: "Друг питає, чим ти займаєшся у вівторок ввечері.",
+          ok: "I sing in a choir. We practise every Tuesday.",
+          opts: [
+            "I sing in a choir. We practise every Tuesday.",
+            "Don't worry. You will perform very well.",
+            "Don't drink it! It smells disgusting.",
+            "Blend it until it is completely smooth.",
+          ],
+        },
+        {
+          lesson: "Lesson 1",
+          en: "an excerpt",
+          sit: "Your teacher gives you a short part of a novel.",
+          uk: "Вчитель дає тобі короткий фрагмент роману.",
+          ok: "Thanks! I will read this excerpt tonight.",
+          opts: [
+            "Thanks! I will read this excerpt tonight.",
+            "Children who witness violence often feel afraid.",
+            "Just sprinkle a little cheese on top.",
+            "It looks so appetizing!",
+          ],
+        },
+        {
+          lesson: "Lesson 1",
+          en: "a set of songs",
+          sit: "Your friend asks what the band did at the festival.",
+          uk: "Друг питає, що гурт робив на фестивалі.",
+          ok: "They played a set of songs for an hour.",
+          opts: [
+            "They played a set of songs for an hour.",
+            "Don't worry. You will perform very well.",
+            "Blend it until it is completely smooth.",
+            "Don't drink it! It smells disgusting.",
+          ],
+        },
+        {
+          lesson: "Lesson 1",
+          en: "on the way to Paris",
+          sit: "Someone asks where you bought your coffee.",
+          uk: "Хтось питає, де ти купив каву.",
+          ok: "I bought it on the way to Paris.",
+          opts: [
+            "I bought it on the way to Paris.",
+            "You need insurance. It is compulsory here.",
+            "It is made from chickpeas, garlic and olive oil.",
+            "My brother cooked a chicken pesto dish.",
+          ],
+        },
+        {
+          lesson: "Lesson 1",
+          en: "to perform",
+          sit: "Your little sister is nervous about Friday.",
+          uk: "Твоя молодша сестра хвилюється через п'ятницю.",
+          ok: "Don't worry. You will perform very well.",
+          opts: [
+            "Don't worry. You will perform very well.",
+            "I sing in a choir. We practise every Tuesday.",
+            "It looks so appetizing!",
+            "I love the smell of fresh bread.",
+          ],
+        },
+        {
+          lesson: "Lesson 1",
+          en: "an excursion",
+          sit: "Your teacher asks about the class plans for tomorrow.",
+          uk: "Вчитель питає про плани класу на завтра.",
+          ok: "We are going on an excursion to a castle.",
+          opts: [
+            "We are going on an excursion to a castle.",
+            "Please stop. We should not call people dumb because of marks.",
+            "That is rude. Please finish your food first.",
+            "My brother cooked a chicken pesto dish.",
+          ],
+        },
+        {
+          lesson: "Lesson 1",
+          en: "overnight trip",
+          sit: "A friend asks if you came home last night.",
+          uk: "Друг питає, чи ти вчора повернувся додому.",
+          ok: "No, we took an overnight trip to the mountains.",
+          opts: [
+            "No, we took an overnight trip to the mountains.",
+            "Thanks! I will read this excerpt tonight.",
+            "I usually have yogurt with honey.",
+            "Yes, it is simple but really tasty.",
+          ],
+        },
+        {
+          lesson: "Lesson 1",
+          en: "violent species",
+          sit: "You read an article about human nature.",
+          uk: "Ти читаєш статтю про природу людини.",
+          ok: "Some scientists say that humans are a violent species.",
+          opts: [
+            "Some scientists say that humans are a violent species.",
+            "I sing in a choir. We practise every Tuesday.",
+            "It was absolutely delicious!",
+            "We have fresh mint tea.",
+          ],
+        },
+        {
+          lesson: "Lesson 1",
+          en: "weapon",
+          sit: "A police officer asks what you saw in the car.",
+          uk: "Поліцейський питає, що ти побачив у машині.",
+          ok: "I saw a weapon under the seat.",
+          opts: [
+            "I saw a weapon under the seat.",
+            "Don't worry. You will perform very well.",
+            "Yes, it is simple but really tasty.",
+            "Yes, a creamy mushroom sauce, please.",
+          ],
+        },
+        {
+          lesson: "Lesson 1",
+          en: "do harm",
+          sit: "Your dentist talks about sweets.",
+          uk: "Стоматолог говорить про солодощі.",
+          ok: "Too many sweets can do harm to your teeth.",
+          opts: [
+            "Too many sweets can do harm to your teeth.",
+            "The trip created a strong bond between them.",
+            "I am completely exhausted. I need sleep.",
+            "That is rude. Please finish your food first.",
+          ],
+        },
+        {
+          lesson: "Lesson 1",
+          en: "dumb people",
+          sit: "Your friend laughs at a classmate's bad marks.",
+          uk: "Друг сміється з поганих оцінок однокласника.",
+          ok: "Please stop. We should not call people dumb because of marks.",
+          opts: [
+            "Please stop. We should not call people dumb because of marks.",
+            "They played a set of songs for an hour.",
+            "We went to an award-winning restaurant.",
+            "Don't. It is dangerous to swim here.",
+          ],
+        },
+        {
+          lesson: "Lesson 1",
+          en: "pass laws",
+          sit: "A reporter asks what Parliament decided.",
+          uk: "Репортер питає, що вирішив парламент.",
+          ok: "They voted to pass stricter laws.",
+          opts: [
+            "They voted to pass stricter laws.",
+            "Right, there is a ban on plastic bags now.",
+            "That smell is absolutely mouth-watering.",
+            "Just sprinkle a little cheese on top.",
+          ],
+        },
+        {
+          lesson: "Lesson 1",
+          en: "take away freedom",
+          sit: "Your friend is angry about a new rule.",
+          uk: "Друг сердиться через нове правило.",
+          ok: "Yes, it takes away our freedom of speech.",
+          opts: [
+            "Yes, it takes away our freedom of speech.",
+            "I run to release anger after a stressful day.",
+            "Blend it until it is completely smooth.",
+            "Just sprinkle a little cheese on top.",
+          ],
+        },
+        {
+          lesson: "Lesson 1",
+          en: "ignorance",
+          sit: "You talk about why people fear each other.",
+          uk: "Ви обговорюєте, чому люди бояться одне одного.",
+          ok: "I think it often comes from ignorance.",
+          opts: [
+            "I think it often comes from ignorance.",
+            "I sing in a choir. We practise every Tuesday.",
+            "Black coffee tastes too bitter for me.",
+            "We went to an award-winning restaurant.",
+          ],
+        },
+        {
+          lesson: "Lesson 1",
+          en: "access to weapons",
+          sit: "You take part in a debate about safety.",
+          uk: "Ти береш участь у дебатах про безпеку.",
+          ok: "Easy access to weapons makes everything more dangerous.",
+          opts: [
+            "Easy access to weapons makes everything more dangerous.",
+            "I saw a weapon under the seat.",
+            "It is a huge success. It is always full.",
+            "I usually have yogurt with honey.",
+          ],
+        },
+        {
+          lesson: "Lesson 1",
+          en: "witness violence",
+          sit: "A teacher talks about a child with problems.",
+          uk: "Вчитель говорить про дитину з проблемами.",
+          ok: "Children who witness violence often feel afraid.",
+          opts: [
+            "Children who witness violence often feel afraid.",
+            "I run to release anger after a stressful day.",
+            "Add a few chopped chives.",
+            "Please add a lime wedge.",
+          ],
+        },
+        {
+          lesson: "Lesson 1",
+          en: "violent peers",
+          sit: "Your friend asks why a boy gets into fights.",
+          uk: "Друг питає, чому хлопець потрапляє в бійки.",
+          ok: "Maybe he spends time with violent peers.",
+          opts: [
+            "Maybe he spends time with violent peers.",
+            "Thanks! I will read this excerpt tonight.",
+            "It was absolutely delicious!",
+            "I love the smell of fresh bread.",
+          ],
+        },
+        {
+          lesson: "Lesson 1",
+          en: "strictly regulated",
+          sit: "A tourist asks if he can buy alcohol anywhere.",
+          uk: "Турист питає, чи можна купити алкоголь будь-де.",
+          ok: "No, alcohol is strictly regulated here.",
+          opts: [
+            "No, alcohol is strictly regulated here.",
+            "Nobody is to blame. It was just bad luck.",
+            "You look stunning in that red dress!",
+            "I often make a hot vegetable soup.",
+          ],
+        },
+        {
+          lesson: "Lesson 1",
+          en: "a citizen",
+          sit: "An officer asks why you cannot vote yet.",
+          uk: "Працівник питає, чому ти ще не можеш голосувати.",
+          ok: "I am not a citizen of this country yet.",
+          opts: [
+            "I am not a citizen of this country yet.",
+            "Don't worry. You will perform very well.",
+            "Blend it until it is completely smooth.",
+            "Don't drink it! It smells disgusting.",
+          ],
+        },
+        {
+          lesson: "Lesson 1",
+          en: "healthcare",
+          sit: "You talk about the promises of the government.",
+          uk: "Ви говорите про обіцянки уряду.",
+          ok: "Free healthcare is the most important one for me.",
+          opts: [
+            "Free healthcare is the most important one for me.",
+            "Please stop. We should not call people dumb because of marks.",
+            "That smell is absolutely mouth-watering.",
+            "Black coffee tastes too bitter for me.",
+          ],
+        },
+        {
+          lesson: "Lesson 1",
+          en: "reasonable price",
+          sit: "A friend asks about your hotel.",
+          uk: "Друг питає про твій готель.",
+          ok: "It was nice and the price was very reasonable.",
+          opts: [
+            "It was nice and the price was very reasonable.",
+            "Nobody is to blame. It was just bad luck.",
+            "Please add a lime wedge.",
+            "It is just a garnish. It makes the dish look nice.",
+          ],
+        },
+        {
+          lesson: "Lesson 1",
+          en: "compulsory insurance",
+          sit: "A tourist asks about car rules in Spain.",
+          uk: "Турист питає про правила для авто в Іспанії.",
+          ok: "You need insurance. It is compulsory here.",
+          opts: [
+            "You need insurance. It is compulsory here.",
+            "Too many sweets can do harm to your teeth.",
+            "Yes, it is simple but really tasty.",
+            "We would like to share a large pizza.",
+          ],
+        },
+        {
+          lesson: "Lesson 1",
+          en: "to blame",
+          sit: "Your boss asks who caused the accident.",
+          uk: "Начальник питає, хто спричинив аварію.",
+          ok: "Nobody is to blame. It was just bad luck.",
+          opts: [
+            "Nobody is to blame. It was just bad luck.",
+            "Right, there is a ban on plastic bags now.",
+            "Yes, a creamy mushroom sauce, please.",
+            "No, thanks. I can't eat very spicy food.",
+          ],
+        },
+        {
+          lesson: "Lesson 1",
+          en: "decrease aggression",
+          sit: "A parent asks how sport helps teenagers.",
+          uk: "Батько питає, чим спорт допомагає підліткам.",
+          ok: "It can help to decrease aggression.",
+          opts: [
+            "It can help to decrease aggression.",
+            "Please stop. We should not call people dumb because of marks.",
+            "Black coffee tastes too bitter for me.",
+            "You look stunning in that red dress!",
+          ],
+        },
+        {
+          lesson: "Lesson 1",
+          en: "release anger",
+          sit: "A friend asks why you go running after work.",
+          uk: "Друг питає, чому ти бігаєш після роботи.",
+          ok: "I run to release anger after a stressful day.",
+          opts: [
+            "I run to release anger after a stressful day.",
+            "They can foster social development in young people.",
+            "We ordered two pizzas online.",
+            "Black coffee tastes too bitter for me.",
+          ],
+        },
+        {
+          lesson: "Lesson 1",
+          en: "attention span",
+          sit: "A teacher says the kids cannot sit quietly for long.",
+          uk: "Вчитель каже, що діти не можуть довго сидіти тихо.",
+          ok: "Young children have a very short attention span.",
+          opts: [
+            "Young children have a very short attention span.",
+            "I think it often comes from ignorance.",
+            "Don't drink it! It smells disgusting.",
+            "It sells exotic fruits from all over the world.",
+          ],
+        },
+        {
+          lesson: "Lesson 1",
+          en: "foster development",
+          sit: "A coach explains why team sports are useful.",
+          uk: "Тренер пояснює, чим корисні командні види спорту.",
+          ok: "They can foster social development in young people.",
+          opts: [
+            "They can foster social development in young people.",
+            "I bought it on the way to Paris.",
+            "We usually serve it with fresh bread.",
+            "He always comes out to taste every dish.",
+          ],
+        },
+        {
+          lesson: "Lesson 1",
+          en: "ban",
+          sit: "A shop assistant says there are no plastic bags.",
+          uk: "Продавець каже, що пакетів немає.",
+          ok: "Right, there is a ban on plastic bags now.",
+          opts: [
+            "Right, there is a ban on plastic bags now.",
+            "They can foster social development in young people.",
+            "My brother cooked a chicken pesto dish.",
+            "It has a bitter-sweet taste.",
+          ],
+        },
+        {
+          lesson: "Lesson 1",
+          en: "bond",
+          sit: "You describe two friends after a long trip.",
+          uk: "Ти розповідаєш про двох друзів після довгої подорожі.",
+          ok: "The trip created a strong bond between them.",
+          opts: [
+            "The trip created a strong bond between them.",
+            "Thanks! I will read this excerpt tonight.",
+            "That smell is absolutely mouth-watering.",
+            "It was incredible. The views were amazing.",
+          ],
+        },
+        {
+          lesson: "Lesson 1",
+          en: "possible solution",
+          sit: "Your manager asks for ideas about city traffic.",
+          uk: "Керівник просить ідеї щодо міського трафіку.",
+          ok: "One possible solution is to limit cars in the centre.",
+          opts: [
+            "One possible solution is to limit cars in the centre.",
+            "It can help to decrease aggression.",
+            "I love the smell of fresh bread.",
+            "Add a few chopped chives.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "delicious",
+          sit: "Your friend asks about the soup you tried.",
+          uk: "Друг питає про суп, який ти скуштував.",
+          ok: "It was absolutely delicious!",
+          opts: [
+            "It was absolutely delicious!",
+            "We have fresh mint tea.",
+            "I bought it on the way to Paris.",
+            "Nobody is to blame. It was just bad luck.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "tasty",
+          sit: "A friend asks if cheap street food is good.",
+          uk: "Друг питає, чи хороша дешева вулична їжа.",
+          ok: "Yes, it is simple but really tasty.",
+          opts: [
+            "Yes, it is simple but really tasty.",
+            "We usually serve it with fresh bread.",
+            "Thanks! I will read this excerpt tonight.",
+            "I run to release anger after a stressful day.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "terrible",
+          sit: "A friend asks about the service in the restaurant.",
+          uk: "Друг питає про обслуговування в ресторані.",
+          ok: "It was terrible. We waited an hour.",
+          opts: [
+            "It was terrible. We waited an hour.",
+            "It is made from chickpeas, garlic and olive oil.",
+            "We are going on an excursion to a castle.",
+            "I think it often comes from ignorance.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "incredible",
+          sit: "Someone asks about your trip to the mountains.",
+          uk: "Хтось питає про твою поїздку в гори.",
+          ok: "It was incredible. The views were amazing.",
+          opts: [
+            "It was incredible. The views were amazing.",
+            "I like crunchy vegetables and nuts.",
+            "Please stop. We should not call people dumb because of marks.",
+            "Maybe he spends time with violent peers.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "disgusting",
+          sit: "Your friend is going to drink old milk.",
+          uk: "Друг збирається випити старе молоко.",
+          ok: "Don't drink it! It smells disgusting.",
+          opts: [
+            "Don't drink it! It smells disgusting.",
+            "It is chopped parsley.",
+            "Nobody is to blame. It was just bad luck.",
+            "We are going on an excursion to a castle.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "stunning",
+          sit: "You see your friend at a wedding.",
+          uk: "Ти бачиш подругу на весіллі.",
+          ok: "You look stunning in that red dress!",
+          opts: [
+            "You look stunning in that red dress!",
+            "I like crunchy vegetables and nuts.",
+            "I sing in a choir. We practise every Tuesday.",
+            "Easy access to weapons makes everything more dangerous.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "exhausted",
+          sit: "A friend asks how you feel after the flight.",
+          uk: "Друг питає, як ти почуваєшся після перельоту.",
+          ok: "I am completely exhausted. I need sleep.",
+          opts: [
+            "I am completely exhausted. I need sleep.",
+            "He always comes out to taste every dish.",
+            "They voted to pass stricter laws.",
+            "Too many sweets can do harm to your teeth.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "fresh",
+          sit: "You walk past a bakery in the morning.",
+          uk: "Ти проходиш повз пекарню вранці.",
+          ok: "I love the smell of fresh bread.",
+          opts: [
+            "I love the smell of fresh bread.",
+            "It is made from chickpeas, garlic and olive oil.",
+            "Some scientists say that humans are a violent species.",
+            "No, we took an overnight trip to the mountains.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "blocked nose",
+          sit: "A friend asks why you do not like the food.",
+          uk: "Друг питає, чому тобі не смакує їжа.",
+          ok: "I can't taste anything. I have a blocked nose.",
+          opts: [
+            "I can't taste anything. I have a blocked nose.",
+            "I often make a hot vegetable soup.",
+            "I run to release anger after a stressful day.",
+            "Some scientists say that humans are a violent species.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "rude",
+          sit: "A child is talking while eating.",
+          uk: "Дитина говорить, поки їсть.",
+          ok: "That is rude. Please finish your food first.",
+          opts: [
+            "That is rude. Please finish your food first.",
+            "It has a bitter-sweet taste.",
+            "Easy access to weapons makes everything more dangerous.",
+            "I think it often comes from ignorance.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "dangerous",
+          sit: "A friend wants to swim in a river with a strong current.",
+          uk: "Друг хоче поплавати в річці з сильною течією.",
+          ok: "Don't. It is dangerous to swim here.",
+          opts: [
+            "Don't. It is dangerous to swim here.",
+            "Yes, it is very appealing. There is so much choice.",
+            "It can help to decrease aggression.",
+            "Don't worry. You will perform very well.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "genuine",
+          sit: "A shop assistant shows you a jacket.",
+          uk: "Продавець показує тобі куртку.",
+          ok: "Is it genuine leather or plastic?",
+          opts: [
+            "Is it genuine leather or plastic?",
+            "A crumbly cheese is perfect.",
+            "No, alcohol is strictly regulated here.",
+            "Yes, it takes away our freedom of speech.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "huge success",
+          sit: "A friend asks about the new restaurant.",
+          uk: "Друг питає про новий ресторан.",
+          ok: "It is a huge success. It is always full.",
+          opts: [
+            "It is a huge success. It is always full.",
+            "We would like to share a large pizza.",
+            "I am not a citizen of this country yet.",
+            "Young children have a very short attention span.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "dish",
+          sit: "A waiter asks what you want to eat.",
+          uk: "Офіціант питає, що ти хочеш їсти.",
+          ok: "I would like the chicken pesto dish, please.",
+          opts: [
+            "I would like the chicken pesto dish, please.",
+            "That smell is absolutely mouth-watering.",
+            "We are going on an excursion to a castle.",
+            "Thanks! I will read this excerpt tonight.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "sauce",
+          sit: "A waiter asks if you want something with your pasta.",
+          uk: "Офіціант питає, чи хочеш щось до пасти.",
+          ok: "Yes, a creamy mushroom sauce, please.",
+          opts: [
+            "Yes, a creamy mushroom sauce, please.",
+            "Don't drink it! It smells disgusting.",
+            "Some scientists say that humans are a violent species.",
+            "They can foster social development in young people.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "flavor",
+          sit: "A friend asks about the ice cream.",
+          uk: "Друг питає про морозиво.",
+          ok: "It has a strong coffee flavor.",
+          opts: [
+            "It has a strong coffee flavor.",
+            "It is a huge success. It is always full.",
+            "Too many sweets can do harm to your teeth.",
+            "I sing in a choir. We practise every Tuesday.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "soup",
+          sit: "A friend asks what you cook in winter.",
+          uk: "Друг питає, що ти готуєш узимку.",
+          ok: "I often make a hot vegetable soup.",
+          opts: [
+            "I often make a hot vegetable soup.",
+            "It was terrible. We waited an hour.",
+            "They voted to pass stricter laws.",
+            "The trip created a strong bond between them.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "yogurt",
+          sit: "Someone asks what you eat for breakfast.",
+          uk: "Хтось питає, що ти їси на сніданок.",
+          ok: "I usually have yogurt with honey.",
+          opts: [
+            "I usually have yogurt with honey.",
+            "Yes, it is simple but really tasty.",
+            "I run to release anger after a stressful day.",
+            "Thanks! I will read this excerpt tonight.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "chickpeas",
+          sit: "A friend asks what hummus is made of.",
+          uk: "Друг питає, з чого роблять хумус.",
+          ok: "It is made from chickpeas, garlic and olive oil.",
+          opts: [
+            "It is made from chickpeas, garlic and olive oil.",
+            "We ordered two pizzas online.",
+            "Free healthcare is the most important one for me.",
+            "Please stop. We should not call people dumb because of marks.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "pizza",
+          sit: "A waiter asks what the two of you want.",
+          uk: "Офіціант питає, що ви обоє хочете.",
+          ok: "We would like to share a large pizza.",
+          opts: [
+            "We would like to share a large pizza.",
+            "It is a huge success. It is always full.",
+            "One possible solution is to limit cars in the centre.",
+            "Maybe he spends time with violent peers.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "taste (a dish)",
+          sit: "A guest asks what the chef is doing.",
+          uk: "Гість питає, що робить кухар.",
+          ok: "He always comes out to taste every dish.",
+          opts: [
+            "He always comes out to taste every dish.",
+            "It has a strong coffee flavor.",
+            "I run to release anger after a stressful day.",
+            "I sing in a choir. We practise every Tuesday.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "garnish",
+          sit: "A friend asks what the mint leaf is for.",
+          uk: "Друг питає, навіщо м'ятний листок.",
+          ok: "It is just a garnish. It makes the dish look nice.",
+          opts: [
+            "It is just a garnish. It makes the dish look nice.",
+            "Just sprinkle a little cheese on top.",
+            "Too many sweets can do harm to your teeth.",
+            "Children who witness violence often feel afraid.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "wedge",
+          sit: "A bartender asks what you want in your drink.",
+          uk: "Бармен питає, що додати в напій.",
+          ok: "Please add a lime wedge.",
+          opts: [
+            "Please add a lime wedge.",
+            "We ordered two pizzas online.",
+            "They voted to pass stricter laws.",
+            "Maybe he spends time with violent peers.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "sprinkle",
+          sit: "A friend asks how to finish the pasta.",
+          uk: "Друг питає, як закінчити пасту.",
+          ok: "Just sprinkle a little cheese on top.",
+          opts: [
+            "Just sprinkle a little cheese on top.",
+            "Add a few chopped chives.",
+            "Please stop. We should not call people dumb because of marks.",
+            "Children who witness violence often feel afraid.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "parsley",
+          sit: "A friend asks what green herb is on the potatoes.",
+          uk: "Друг питає, що за зелена трава на картоплі.",
+          ok: "It is chopped parsley.",
+          opts: [
+            "It is chopped parsley.",
+            "It was incredible. The views were amazing.",
+            "Young children have a very short attention span.",
+            "Easy access to weapons makes everything more dangerous.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "chives",
+          sit: "A friend asks what to add to the eggs.",
+          uk: "Друг питає, що додати до яєць.",
+          ok: "Add a few chopped chives.",
+          opts: [
+            "Add a few chopped chives.",
+            "I like crunchy vegetables and nuts.",
+            "Maybe he spends time with violent peers.",
+            "I saw a weapon under the seat.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "mint",
+          sit: "A guest asks what tea you have.",
+          uk: "Гість питає, який у вас є чай.",
+          ok: "We have fresh mint tea.",
+          opts: [
+            "We have fresh mint tea.",
+            "That smell is absolutely mouth-watering.",
+            "We are going on an excursion to a castle.",
+            "I sing in a choir. We practise every Tuesday.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "serve",
+          sit: "A friend asks how you eat the soup.",
+          uk: "Друг питає, як ви їсте суп.",
+          ok: "We usually serve it with fresh bread.",
+          opts: [
+            "We usually serve it with fresh bread.",
+            "We have fresh mint tea.",
+            "It was nice and the price was very reasonable.",
+            "No, we took an overnight trip to the mountains.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "cooked",
+          sit: "A friend asks who made dinner last night.",
+          uk: "Друг питає, хто готував учора вечерю.",
+          ok: "My brother cooked a chicken pesto dish.",
+          opts: [
+            "My brother cooked a chicken pesto dish.",
+            "Yes, it is very appealing. There is so much choice.",
+            "They can foster social development in young people.",
+            "They voted to pass stricter laws.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "ordered",
+          sit: "A friend asks how you got the pizza.",
+          uk: "Друг питає, як ви дістали піцу.",
+          ok: "We ordered two pizzas online.",
+          opts: [
+            "We ordered two pizzas online.",
+            "It sells exotic fruits from all over the world.",
+            "I saw a weapon under the seat.",
+            "Yes, it takes away our freedom of speech.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "appetizing",
+          sit: "A friend looks at a cake in a shop window.",
+          uk: "Друг дивиться на торт у вітрині.",
+          ok: "It looks so appetizing!",
+          opts: [
+            "It looks so appetizing!",
+            "Don't drink it! It smells disgusting.",
+            "Please stop. We should not call people dumb because of marks.",
+            "No, alcohol is strictly regulated here.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "appealing",
+          sit: "A friend asks if you like the menu.",
+          uk: "Друг питає, чи подобається тобі меню.",
+          ok: "Yes, it is very appealing. There is so much choice.",
+          opts: [
+            "Yes, it is very appealing. There is so much choice.",
+            "It has a strong coffee flavor.",
+            "Young children have a very short attention span.",
+            "Too many sweets can do harm to your teeth.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "mouth-watering",
+          sit: "You smell bread from the kitchen.",
+          uk: "Ти чуєш запах хліба з кухні.",
+          ok: "That smell is absolutely mouth-watering.",
+          opts: [
+            "That smell is absolutely mouth-watering.",
+            "Don't drink it! It smells disgusting.",
+            "I think it often comes from ignorance.",
+            "Thanks! I will read this excerpt tonight.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "spicy",
+          sit: "A waiter asks if you want chili.",
+          uk: "Офіціант питає, чи хочеш чилі.",
+          ok: "No, thanks. I can't eat very spicy food.",
+          opts: [
+            "No, thanks. I can't eat very spicy food.",
+            "I am completely exhausted. I need sleep.",
+            "I saw a weapon under the seat.",
+            "Thanks! I will read this excerpt tonight.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "bitter",
+          sit: "A friend asks why you add sugar to your coffee.",
+          uk: "Друг питає, навіщо ти додаєш цукор у каву.",
+          ok: "Black coffee tastes too bitter for me.",
+          opts: [
+            "Black coffee tastes too bitter for me.",
+            "I can't taste anything. I have a blocked nose.",
+            "Don't worry. You will perform very well.",
+            "They voted to pass stricter laws.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "bitter-sweet",
+          sit: "A friend asks what dark chocolate with orange tastes like.",
+          uk: "Друг питає, який смак у чорного шоколаду з апельсином.",
+          ok: "It has a bitter-sweet taste.",
+          opts: [
+            "It has a bitter-sweet taste.",
+            "It was terrible. We waited an hour.",
+            "I am not a citizen of this country yet.",
+            "No, we took an overnight trip to the mountains.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "crunchy",
+          sit: "A friend asks what you like in a salad.",
+          uk: "Друг питає, що ти любиш у салаті.",
+          ok: "I like crunchy vegetables and nuts.",
+          opts: [
+            "I like crunchy vegetables and nuts.",
+            "I can't taste anything. I have a blocked nose.",
+            "They can foster social development in young people.",
+            "I sing in a choir. We practise every Tuesday.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "crumbly",
+          sit: "A friend asks which cheese is best on a salad.",
+          uk: "Друг питає, який сир найкращий до салату.",
+          ok: "A crumbly cheese is perfect.",
+          opts: [
+            "A crumbly cheese is perfect.",
+            "Add a few chopped chives.",
+            "Maybe he spends time with violent peers.",
+            "One possible solution is to limit cars in the centre.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "smooth",
+          sit: "A friend asks when the soup will be ready.",
+          uk: "Друг питає, коли суп буде готовий.",
+          ok: "Blend it until it is completely smooth.",
+          opts: [
+            "Blend it until it is completely smooth.",
+            "Yes, it is very appealing. There is so much choice.",
+            "Right, there is a ban on plastic bags now.",
+            "They voted to pass stricter laws.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "healthy",
+          sit: "A friend asks why you eat so many vegetables.",
+          uk: "Друг питає, чому ти їси так багато овочів.",
+          ok: "I want to have a healthy diet.",
+          opts: [
+            "I want to have a healthy diet.",
+            "Add a few chopped chives.",
+            "No, alcohol is strictly regulated here.",
+            "Right, there is a ban on plastic bags now.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "exotic",
+          sit: "A friend asks what the market sells.",
+          uk: "Друг питає, що продають на ринку.",
+          ok: "It sells exotic fruits from all over the world.",
+          opts: [
+            "It sells exotic fruits from all over the world.",
+            "We ordered two pizzas online.",
+            "I bought it on the way to Paris.",
+            "Right, there is a ban on plastic bags now.",
+          ],
+        },
+        {
+          lesson: "Lesson 2",
+          en: "award-winning",
+          sit: "A friend asks where you had dinner in Lisbon.",
+          uk: "Друг питає, де ти вечеряв у Лісабоні.",
+          ok: "We went to an award-winning restaurant.",
+          opts: [
+            "We went to an award-winning restaurant.",
+            "No, thanks. I can't eat very spicy food.",
+            "I think it often comes from ignorance.",
+            "Yes, it takes away our freedom of speech.",
+          ],
         },
       ];
       /* DATA END */
@@ -1977,11 +3641,13 @@
         ];
         var EXS = [
           ["pairs", "Пари", "з'єднай"],
-          ["gap", "Пропуск", "впиши слово"],
+          ["gap", "Пропуск", "впиши"],
           ["quiz", "Тест", "4 варіанти"],
           ["dict", "Диктант", "на слух"],
-          ["fork", "Виделки", "що поєднується"],
+          ["fork", "Виделки", "поєднай"],
           ["sort", "Категорії", "розклади"],
+          ["fix", "Помилки", "виправ"],
+          ["sit", "Ситуації", "що сказати"],
         ];
         var INT = [1, 3, 7, 14, 30, 60];
         var KEY = "victoria_phrase_cards_v1";
@@ -2018,6 +3684,7 @@
         var DB = lsGet();
         if (!DB || typeof DB !== "object") DB = {};
         if (!DB.cards || typeof DB.cards !== "object") DB.cards = {};
+        if (!DB.ex || typeof DB.ex !== "object") DB.ex = {};
         DB.prefs = Object.assign(
           {
             lessons: [],
@@ -2469,6 +4136,38 @@
         var X = null,
           XID = 0,
           LASTW = [];
+        var KINDS = [
+          ["D", "Дія (що робити?)"],
+          ["R", "Хто? Що? (іменник)"],
+          ["O", "Який? Як? (опис)"],
+          ["Z", "Зв'язки й підсилювачі"],
+          ["F", "Ціла фраза / репліка"],
+          ["S", "Почати / додати"],
+          ["P", "Протиставити"],
+          ["U", "Підсумувати"],
+          ["I", "Підсилити думку"],
+        ];
+        var EXINFO = {
+          pairs:
+            "З'єднуй фразу з перекладом дошками по 6 пар, поки не з'єднаєш усі.",
+          gap: "Впиши пропущене слово в реченні. Є підказка-переклад і перша літера.",
+          quiz: "Обери правильний варіант із чотирьох. Напрям перекладу змінюється.",
+          dict: "Прослухай фразу й напиши її. Є кнопка «Повільніше».",
+          fork: "Обери все, що поєднується з ключовим словом.",
+          fix: "Знайди частину речення з помилкою й напиши правильний варіант.",
+          sit: "Прочитай ситуацію й обери репліку з потрібною фразою.",
+          sort: "Торкнись фрази, потім групи. Дошки до 8 фраз з одного уроку.",
+        };
+        function kindName(k) {
+          for (var i = 0; i < KINDS.length; i++)
+            if (KINDS[i][0] === k) return KINDS[i][1];
+          return k;
+        }
+        function exName(type) {
+          for (var i = 0; i < EXS.length; i++)
+            if (EXS[i][0] === type) return EXS[i][1];
+          return type;
+        }
         function exPool() {
           var p = poolCards();
           if (DB.prefs.exSrc === "repeat")
@@ -2477,6 +4176,72 @@
             });
           return p;
         }
+
+        /* Статистика вправ: за англійською фразою, щоб раунди не повторювалися */
+        function exStat(type, id) {
+          var t = DB.ex[type],
+            s = t && t[id];
+          return s && typeof s === "object"
+            ? { n: s.n | 0, w: s.w ? 1 : 0 }
+            : { n: 0, w: 0 };
+        }
+        function exRecord(type, id, wrong) {
+          if (!DB.ex[type] || typeof DB.ex[type] !== "object") DB.ex[type] = {};
+          var s = exStat(type, id);
+          DB.ex[type][id] = { n: s.n + 1, w: wrong ? 1 : 0 };
+          save();
+        }
+        function isNew(type, id) {
+          var s = exStat(type, id);
+          return s.n === 0 || s.w === 1;
+        }
+        function ordered(type, list, idOf) {
+          var a = [],
+            b = [];
+          shuffle(list).forEach(function (x) {
+            (isNew(type, idOf(x)) ? a : b).push(x);
+          });
+          return a.concat(b);
+        }
+        function chunk(a, size) {
+          var r = [];
+          for (var i = 0; i < a.length; i += size) r.push(a.slice(i, i + size));
+          if (r.length > 1 && r[r.length - 1].length < 3) {
+            var l = r.pop();
+            r[r.length - 1] = r[r.length - 1].concat(l);
+          }
+          return r;
+        }
+        function mk(type, items, idOf, extra) {
+          var fresh = items.filter(function (x) {
+            return isNew(type, idOf(x));
+          }).length;
+          return Object.assign(
+            {
+              type: type,
+              id: ++XID,
+              started: false,
+              over: false,
+              n: items.length,
+              fresh: fresh,
+              items: items,
+              i: 0,
+              wrong: new Set(),
+              answered: 0,
+              checked: false,
+              bad: [],
+            },
+            extra || {},
+          );
+        }
+        function qmeta(txt) {
+          return (
+            '<div class="q-meta"><span>' +
+            txt +
+            '</span><button class="linkbtn" data-act="endround">Завершити раунд</button></div>'
+          );
+        }
+
         function renderEx() {
           var v = $("#view"),
             P = DB.prefs;
@@ -2505,25 +4270,47 @@
           if (!X || X.type !== P.ex) startX(P.ex);
           else drawX();
         }
+        var BUILD = {
+          pairs: buildPairs,
+          gap: buildGap,
+          quiz: buildQuiz,
+          dict: buildDict,
+          fork: buildFork,
+          fix: buildFix,
+          sit: buildSit,
+          sort: buildSort,
+        };
         function startX(type) {
-          ({
-            pairs: startPairs,
-            gap: startGap,
-            quiz: startQuiz,
-            dict: startDict,
-            fork: startFork,
-            sort: startSort,
-          })[type]();
+          X = BUILD[type]();
           drawX();
+        }
+        function isDone() {
+          if (X.type === "pairs" || X.type === "sort")
+            return X.b >= X.boards.length;
+          return X.i >= X.items.length;
         }
         function drawX() {
           if (!$("#exBody") || !X) return;
+          if (!X.n) {
+            $("#exBody").innerHTML = emptyEx();
+            return;
+          }
+          if (!X.started) {
+            introHtml();
+            return;
+          }
+          if (X.over || isDone()) {
+            showResult();
+            return;
+          }
           ({
             pairs: drawPairs,
             gap: drawText,
             quiz: drawQuiz,
             dict: drawText,
             fork: drawFork,
+            fix: drawFix,
+            sit: drawSit,
             sort: drawSort,
           })[X.type]();
         }
@@ -2538,79 +4325,126 @@
             "</p></div>"
           );
         }
+        function introHtml() {
+          $("#exBody").innerHTML =
+            '<div class="panel"><h2>' +
+            esc(exName(X.type)) +
+            '</h2><p class="muted">У раунді ' +
+            X.n +
+            " завдань, нових для тебе: " +
+            X.fresh +
+            '</p><p class="note">' +
+            esc(EXINFO[X.type]) +
+            '</p><div class="row"><button class="btn btn-dark" data-act="xstart">Почати раунд</button></div></div>';
+        }
         function resultHtml(title, score, total, wrong) {
-          LASTW = wrong.slice();
+          LASTW = wrong
+            .map(function (e) {
+              return e.en;
+            })
+            .filter(Boolean);
           var list = wrong
-            .map(function (en) {
-              var c = BY.get(en);
+            .map(function (e) {
               return (
-                "<li><b>" +
-                esc(c.en) +
-                "</b><span>" +
-                esc(c.uk) +
-                "</span></li>"
+                "<li><b>" + esc(e.a) + "</b><span>" + esc(e.b) + "</span></li>"
               );
             })
             .join("");
+          var body =
+            total === 0
+              ? '<p class="muted">Раунд завершено без відповідей.</p>'
+              : wrong.length
+                ? '<span class="label">Помилки</span><ul class="list">' +
+                  list +
+                  "</ul>"
+                : '<p class="muted">Без помилок. Чудово!</p>';
           return (
             '<div class="panel"><h2>' +
-            title +
+            esc(title) +
             ': результат</h2><div class="score">' +
             score +
             "<small> / " +
             total +
             "</small></div>" +
-            (wrong.length
-              ? '<span class="label">Помилки</span><ul class="list">' +
-                list +
-                "</ul>"
-              : '<p class="muted">Без помилок. Чудово!</p>') +
+            body +
             '<div class="row">' +
-            (wrong.length
+            (LASTW.length
               ? '<button class="btn btn-k" data-act="addrep" id="addBtn">Додати ці слова в повторення</button>'
               : "") +
-            '<button class="btn btn-plain" data-act="exagain">Ще раз</button></div><p class="ok-msg" id="exMsg" role="status"></p></div>'
+            '<button class="btn btn-plain" data-act="exagain">Новий раунд</button></div><p class="ok-msg" id="exMsg" role="status"></p></div>'
           );
         }
+        function showResult() {
+          var wr, score, total;
+          function entry(en) {
+            var c = BY.get(en);
+            return { en: en, a: c.en, b: c.uk };
+          }
+          if (X.type === "pairs") {
+            total = X.done.size;
+            var w = Array.from(X.done).filter(function (en) {
+              return X.wrong.has(en);
+            });
+            score = total - w.length;
+            wr = w.map(entry);
+          } else if (X.type === "fork") {
+            total = X.answered;
+            wr = X.bad;
+            score = total - wr.length;
+          } else if (X.type === "sort") {
+            total = X.total;
+            score = X.score;
+            wr = X.badS;
+          } else {
+            total = X.answered;
+            var w2 = Array.from(X.wrong);
+            score = total - w2.length;
+            wr = w2.map(entry);
+          }
+          $("#exBody").innerHTML = resultHtml(exName(X.type), score, total, wr);
+        }
 
-        /* Пари */
-        function startPairs() {
-          var p = shuffle(exPool()).slice(0, 6);
-          X = {
-            type: "pairs",
-            id: ++XID,
-            pairs: p,
-            L: shuffle(
-              p.map(function (c) {
-                return c.en;
-              }),
-            ),
-            R: shuffle(
-              p.map(function (c) {
-                return c.en;
-              }),
-            ),
-            done: new Set(),
-            wrong: new Set(),
-            sel: null,
-            flash: null,
-          };
+        /* Пари: дошки по 6 пар */
+        function buildPairs() {
+          var p = ordered("pairs", exPool(), function (c) {
+            return c.en;
+          });
+          var x = mk(
+            "pairs",
+            p,
+            function (c) {
+              return c.en;
+            },
+            {
+              boards: chunk(
+                p.map(function (c) {
+                  return c.en;
+                }),
+                6,
+              ),
+              b: 0,
+              done: new Set(),
+              sel: null,
+              flash: null,
+            },
+          );
+          if (x.boards.length) setBoard(x);
+          return x;
+        }
+        function setBoard(x) {
+          var bd = x.boards[x.b];
+          x.L = shuffle(bd);
+          x.R = shuffle(bd);
+          x.sel = null;
+          x.flash = null;
         }
         function drawPairs() {
-          var b = $("#exBody");
-          if (X.pairs.length < 2) {
-            b.innerHTML = emptyEx();
-            return;
-          }
-          if (X.done.size === X.pairs.length) {
-            b.innerHTML = resultHtml(
-              "Пари",
-              X.pairs.length - X.wrong.size,
-              X.pairs.length,
-              Array.from(X.wrong),
-            );
-            return;
-          }
+          var b = $("#exBody"),
+            bd = X.boards[X.b],
+            last = X.b + 1 >= X.boards.length;
+          var allIn = bd.every(function (e) {
+            return X.done.has(e);
+          });
           function cell(en, side) {
             var c = BY.get(en),
               cls = "m",
@@ -2641,11 +4475,18 @@
             );
           }
           b.innerHTML =
-            '<div class="panel"><div class="q-meta"><span>З\'єднай фразу з перекладом</span><span>' +
-            X.done.size +
-            " / " +
-            X.pairs.length +
-            '</span></div><div class="match"><div class="colm">' +
+            '<div class="panel">' +
+            qmeta(
+              "Дошка " +
+                (X.b + 1) +
+                " з " +
+                X.boards.length +
+                " · з'єднано " +
+                X.done.size +
+                " з " +
+                X.n,
+            ) +
+            '<p class="muted">З\'єднай фразу з перекладом</p><div class="match"><div class="colm">' +
             X.L.map(function (e) {
               return cell(e, "l");
             }).join("") +
@@ -2653,7 +4494,13 @@
             X.R.map(function (e) {
               return cell(e, "r");
             }).join("") +
-            "</div></div></div>";
+            "</div></div>" +
+            (allIn
+              ? '<div class="row"><button class="btn btn-dark" data-act="pnext">' +
+                (last ? "Результат" : "Далі") +
+                "</button></div>"
+              : "") +
+            "</div>";
         }
         function pairClick(side, en) {
           if (X.done.has(en) || X.flash) return;
@@ -2667,6 +4514,8 @@
           X.sel = null;
           if (l === r) {
             X.done.add(l);
+            X.answered++;
+            exRecord("pairs", l, X.wrong.has(l));
             drawX();
             return;
           }
@@ -2683,57 +4532,36 @@
           }, 450);
         }
 
-        /* Пропуск і диктант (спільна логіка) */
-        function startGap() {
-          X = {
-            type: "gap",
-            id: ++XID,
-            items: shuffle(exPool()).slice(0, 10),
-            i: 0,
-            wrong: new Set(),
-            checked: false,
-          };
+        /* Пропуск і диктант */
+        function buildGap() {
+          var it = ordered("gap", exPool(), function (c) {
+            return c.en;
+          });
+          return mk("gap", it, function (c) {
+            return c.en;
+          });
         }
-        function startDict() {
-          X = {
-            type: "dict",
-            id: ++XID,
-            items: shuffle(exPool()).slice(0, 8),
-            i: 0,
-            wrong: new Set(),
-            checked: false,
-          };
+        function buildDict() {
+          var it = ordered("dict", exPool(), function (c) {
+            return c.en;
+          });
+          return mk("dict", it, function (c) {
+            return c.en;
+          });
         }
         function drawText() {
           var b = $("#exBody"),
             n = X.items.length,
             isGap = X.type === "gap";
-          if (!n) {
-            b.innerHTML = emptyEx();
-            return;
-          }
-          if (X.i >= n) {
-            b.innerHTML = resultHtml(
-              isGap ? "Пропуск" : "Диктант",
-              n - X.wrong.size,
-              n,
-              Array.from(X.wrong),
-            );
-            return;
-          }
-          var c = X.items[X.i],
-            last = X.i + 1 >= n;
+          var c = X.items[X.i];
           var attrs =
             'id="xIn" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"';
           if (isGap) {
             var parts = c.ex.split("___"),
               w = Math.max(6, c.ans.length + 2);
             b.innerHTML =
-              '<div class="panel"><div class="q-meta"><span>Питання ' +
-              (X.i + 1) +
-              " / " +
-              n +
-              "</span><span>Пропуск</span></div>" +
+              '<div class="panel">' +
+              qmeta("Питання " + (X.i + 1) + " з " + n + " · Пропуск") +
               '<p class="q-sent">' +
               esc(parts[0]) +
               "<input " +
@@ -2749,11 +4577,8 @@
               '<div class="row"><button class="btn btn-plain btn-sm" data-act="hint">Перша літера</button><button class="btn btn-dark" id="xBtn" data-act="tcheck">Перевірити</button></div></div>';
           } else {
             b.innerHTML =
-              '<div class="panel"><div class="q-meta"><span>Фраза ' +
-              (X.i + 1) +
-              " / " +
-              n +
-              "</span><span>Диктант</span></div>" +
+              '<div class="panel">' +
+              qmeta("Питання " + (X.i + 1) + " з " + n + " · Диктант") +
               '<p class="muted">Прослухай і напиши англійською.</p>' +
               '<div class="play"><button class="btn btn-k btn-sm" data-act="dplay">Прослухати</button><button class="btn btn-plain btn-sm" data-act="dslow">Повільніше</button></div>' +
               "<input " +
@@ -2766,12 +4591,12 @@
             try {
               inp.focus({ preventScroll: true });
             } catch (e) {}
-          if (!isGap && hasTTS && X.i > 0) speak(sayText(c), false);
-          void last;
+          if (!isGap) speak(sayText(c), false);
         }
         function textCheck() {
           var c = X.items[X.i],
             inp = $("#xIn");
+          if (!inp) return;
           if (X.checked) {
             X.i++;
             X.checked = false;
@@ -2781,9 +4606,11 @@
           var target = X.type === "gap" ? c.ans : c.en,
             ok = norm(inp.value) === norm(target);
           X.checked = true;
+          X.answered++;
           inp.readOnly = true;
           inp.classList.add(ok ? "good" : "wrong");
           if (!ok) X.wrong.add(c.en);
+          exRecord(X.type, c.en, !ok);
           var fb = $("#fb");
           fb.className = "fb " + (ok ? "good" : "wrong");
           fb.innerHTML =
@@ -2822,39 +4649,25 @@
           });
           return shuffle(opts);
         }
-        function startQuiz() {
-          var items = shuffle(exPool())
-            .slice(0, 10)
-            .map(function (c) {
-              var dir = Math.random() < 0.5 ? "eu" : "ue";
-              return { c: c, dir: dir, opts: makeOpts(c, dir) };
-            });
-          X = {
-            type: "quiz",
-            id: ++XID,
-            items: items,
-            i: 0,
-            wrong: new Set(),
-            checked: false,
-            pick: -1,
-          };
+        function buildQuiz() {
+          var items = ordered("quiz", exPool(), function (c) {
+            return c.en;
+          }).map(function (c) {
+            var dir = Math.random() < 0.5 ? "eu" : "ue";
+            return { c: c, dir: dir, opts: makeOpts(c, dir) };
+          });
+          return mk(
+            "quiz",
+            items,
+            function (it) {
+              return it.c.en;
+            },
+            { pick: -1 },
+          );
         }
         function drawQuiz() {
           var b = $("#exBody"),
             n = X.items.length;
-          if (!n) {
-            b.innerHTML = emptyEx();
-            return;
-          }
-          if (X.i >= n) {
-            b.innerHTML = resultHtml(
-              "Тест",
-              n - X.wrong.size,
-              n,
-              Array.from(X.wrong),
-            );
-            return;
-          }
           var q = X.items[X.i],
             eu = q.dir === "eu";
           var head = eu
@@ -2885,13 +4698,15 @@
             })
             .join("");
           b.innerHTML =
-            '<div class="panel"><div class="q-meta"><span>Питання ' +
-            (X.i + 1) +
-            " / " +
-            n +
-            "</span><span>" +
-            (eu ? "EN → UA" : "UA → EN") +
-            "</span></div>" +
+            '<div class="panel">' +
+            qmeta(
+              "Питання " +
+                (X.i + 1) +
+                " з " +
+                n +
+                " · " +
+                (eu ? "EN → UA" : "UA → EN"),
+            ) +
             head +
             '<div class="opts">' +
             opts +
@@ -2904,15 +4719,96 @@
             "</div>";
         }
 
-        /* Виделки */
-        function startFork() {
-          var items = shuffle(
-            FORKS.filter(function (f) {
-              return sel().indexOf(f.lesson) >= 0;
-            }),
-          ).map(function (f) {
-            return {
-              f: f,
+        /* Виделки: по одній із колокацій кожної фрази плюс готові з FORKS */
+        var STOP = {
+          a: 1,
+          an: 1,
+          the: 1,
+          of: 1,
+          to: 1,
+          on: 1,
+          in: 1,
+          for: 1,
+          at: 1,
+          with: 1,
+          by: 1,
+          from: 1,
+          sb: 1,
+          sth: 1,
+          be: 1,
+          your: 1,
+          you: 1,
+          my: 1,
+        };
+        function stems(s) {
+          return norm(s)
+            .split(" ")
+            .filter(function (w) {
+              return w && !STOP[w];
+            })
+            .map(function (w) {
+              return w.slice(0, 5);
+            });
+        }
+        function genFork(c) {
+          var key = stems(c.en).concat(stems(c.col.join(" ")));
+          var cand = [];
+          CARDS.forEach(function (o) {
+            if (o.en === c.en) return;
+            o.col.forEach(function (x) {
+              var t = stems(x);
+              if (
+                t.length &&
+                !t.some(function (w) {
+                  return key.indexOf(w) >= 0;
+                })
+              )
+                cand.push({ x: x, from: o.en, t: t });
+            });
+          });
+          cand = shuffle(cand);
+          var bad = [],
+            used = [],
+            froms = {};
+          for (var i = 0; i < cand.length && bad.length < 2; i++) {
+            var k = cand[i];
+            if (froms[k.from]) continue;
+            if (
+              k.t.some(function (w) {
+                return used.indexOf(w) >= 0;
+              })
+            )
+              continue;
+            bad.push(k.x);
+            froms[k.from] = 1;
+            used = used.concat(k.t);
+          }
+          var opts = c.col
+            .map(function (w) {
+              return { w: w, ok: true };
+            })
+            .concat(
+              bad.map(function (w) {
+                return { w: w, ok: false };
+              }),
+            );
+          return {
+            id: c.en,
+            en: c.en,
+            word: c.en,
+            opts: shuffle(opts),
+            why: "Колокації: " + c.col.join(", ") + ".",
+          };
+        }
+        function buildFork() {
+          var items = exPool().map(genFork);
+          FORKS.filter(function (f) {
+            return sel().indexOf(f.lesson) >= 0;
+          }).forEach(function (f) {
+            items.push({
+              id: "F|" + f.lesson + "|" + f.word,
+              en: null,
+              word: f.word,
               opts: shuffle(
                 f.ok
                   .map(function (w) {
@@ -2920,52 +4816,25 @@
                   })
                   .concat([{ w: f.bad, ok: false }]),
               ),
-            };
+              why: f.why,
+            });
           });
-          X = {
-            type: "fork",
-            id: ++XID,
-            items: items,
-            i: 0,
-            pick: new Set(),
-            checked: false,
-            bad: [],
-          };
+          items = ordered("fork", items, function (it) {
+            return it.id;
+          });
+          return mk(
+            "fork",
+            items,
+            function (it) {
+              return it.id;
+            },
+            { pick: new Set() },
+          );
         }
         function drawFork() {
           var b = $("#exBody"),
-            n = X.items.length;
-          if (!n) {
-            b.innerHTML = emptyEx();
-            return;
-          }
-          if (X.i >= n) {
-            var list = X.bad
-              .map(function (f) {
-                return (
-                  "<li><b>" +
-                  esc(f.word) +
-                  "</b><span>" +
-                  esc(f.why) +
-                  "</span></li>"
-                );
-              })
-              .join("");
-            b.innerHTML =
-              '<div class="panel"><h2>Виделки: результат</h2><div class="score">' +
-              (n - X.bad.length) +
-              "<small> / " +
-              n +
-              "</small></div>" +
-              (X.bad.length
-                ? '<span class="label">Повтори</span><ul class="list">' +
-                  list +
-                  "</ul>"
-                : '<p class="muted">Без помилок. Чудово!</p>') +
-              '<div class="row"><button class="btn btn-plain" data-act="exagain">Ще раз</button></div></div>';
-            return;
-          }
-          var it = X.items[X.i];
+            n = X.items.length,
+            it = X.items[X.i];
           var opts = it.opts
             .map(function (o) {
               var cls = "fopt",
@@ -2991,16 +4860,20 @@
             })
             .join("");
           b.innerHTML =
-            '<div class="panel"><div class="q-meta"><span>Виделка ' +
-            (X.i + 1) +
-            " / " +
-            n +
-            '</span><span>Вибери все, що поєднується</span></div><div class="fork"><div class="fork-key">' +
-            esc(it.f.word) +
+            '<div class="panel">' +
+            qmeta(
+              "Питання " +
+                (X.i + 1) +
+                " з " +
+                n +
+                " · Вибери все, що поєднується",
+            ) +
+            '<div class="fork"><div class="fork-key">' +
+            esc(it.word) +
             '</div><div class="fork-opts">' +
             opts +
             "</div></div>" +
-            (X.checked ? '<p class="fb">' + esc(it.f.why) + "</p>" : "") +
+            (X.checked ? '<p class="fb">' + esc(it.why) + "</p>" : "") +
             '<div class="row"><button class="btn btn-dark" data-act="fcheck"' +
             (!X.checked && X.pick.size === 0 ? " disabled" : "") +
             ">" +
@@ -3017,94 +4890,338 @@
             return;
           }
           X.checked = true;
+          X.answered++;
           var full = it.opts.every(function (o) {
             return X.pick.has(o.w) === o.ok;
           });
-          if (!full) X.bad.push(it.f);
+          exRecord("fork", it.id, !full);
+          if (!full) X.bad.push({ en: it.en, a: it.word, b: it.why });
           drawX();
         }
 
-        /* Категорії */
-        function startSort() {
-          var sets = SORTS.filter(function (s) {
-            return sel().indexOf(s.lesson) >= 0;
-          });
-          X = {
-            type: "sort",
-            id: ++XID,
-            sets: sets,
-            i: 0,
-            score: 0,
-            total: 0,
-            bad: [],
-            cur: null,
-          };
-          if (sets.length) newSortSet();
+        /* Помилки: знайти частину з помилкою й виправити */
+        function poolSet() {
+          return new Set(
+            exPool().map(function (c) {
+              return c.en;
+            }),
+          );
         }
-        function newSortSet() {
-          var s = X.sets[X.i],
-            items = [];
-          Object.keys(s.cats).forEach(function (k) {
-            s.cats[k].forEach(function (p) {
-              items.push(p);
-            });
+        function buildFix() {
+          var ps = poolSet();
+          var items = ordered(
+            "fix",
+            FIXES.filter(function (f) {
+              return ps.has(f.en);
+            }),
+            function (f) {
+              return f.en;
+            },
+          );
+          return mk(
+            "fix",
+            items,
+            function (f) {
+              return f.en;
+            },
+            { step: 1, miss: 0, missSet: new Set(), typedOk: false },
+          );
+        }
+        function fixSentence(f, fixed) {
+          return f.parts
+            .map(function (p, i) {
+              return i === f.bad - 1 && fixed ? f.fix[0] : p;
+            })
+            .join(" ");
+        }
+        function drawFix() {
+          var b = $("#exBody"),
+            n = X.items.length,
+            f = X.items[X.i],
+            bi = f.bad - 1,
+            step = X.step;
+          var parts = f.parts
+            .map(function (p, i) {
+              var cls = "fx-part";
+              if (step === 1) {
+                if (X.missSet.has(i)) cls += " miss";
+                if (X.miss >= 2 && i === bi) cls += " hl";
+              } else if (i === bi) cls += step === 3 ? " fixed" : " found";
+              var txt = i === bi && step === 3 ? f.fix[0] : p;
+              return (
+                '<button class="' +
+                cls +
+                '" data-act="fxpart" data-i="' +
+                i +
+                '"' +
+                (step > 1 ? " disabled" : "") +
+                ">" +
+                esc(txt) +
+                "</button>"
+              );
+            })
+            .join("");
+          var tail = "";
+          if (step === 1) {
+            tail =
+              '<p class="muted">Торкнись частини речення з помилкою.' +
+              (X.miss >= 2 ? " Підказка: вона підсвічена." : "") +
+              "</p>";
+          } else if (step === 2) {
+            tail =
+              '<p class="muted">Напиши правильний варіант замість «' +
+              esc(f.parts[bi]) +
+              "».</p>" +
+              '<input id="xIn" class="typed" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Правильний варіант">' +
+              '<div class="row"><button class="btn btn-dark" data-act="fxcheck">Перевірити</button></div>';
+          } else {
+            var wrong = X.miss >= 2 || !X.typedOk;
+            tail =
+              '<p class="fb ' +
+              (wrong ? "wrong" : "good") +
+              '">' +
+              (X.typedOk ? "Правильно!" : "Правильно: " + esc(f.fix[0])) +
+              "</p>" +
+              '<p class="sit-uk">' +
+              esc(f.why) +
+              "</p>" +
+              '<div class="row"><button class="btn btn-k btn-sm" data-act="fxsay">Прослухати</button><button class="btn btn-dark" data-act="fxnext">' +
+              (X.i + 1 >= n ? "Результат" : "Далі") +
+              "</button></div>";
+          }
+          b.innerHTML =
+            '<div class="panel">' +
+            qmeta("Питання " + (X.i + 1) + " з " + n + " · Знайди помилку") +
+            '<div class="fx-sent">' +
+            parts +
+            "</div>" +
+            tail +
+            "</div>";
+          var inp = $("#xIn");
+          if (inp)
+            try {
+              inp.focus({ preventScroll: true });
+            } catch (e) {}
+        }
+        function fixPart(i) {
+          var f = X.items[X.i];
+          if (X.step !== 1) return;
+          if (i === f.bad - 1) {
+            X.step = 2;
+          } else {
+            X.miss++;
+            X.missSet.add(i);
+          }
+          drawX();
+        }
+        function fixCheck() {
+          var f = X.items[X.i],
+            inp = $("#xIn");
+          if (X.step !== 2 || !inp) return;
+          var typed = norm(inp.value);
+          X.typedOk = f.fix.some(function (v) {
+            return norm(v) === typed;
           });
-          X.cur = {
-            items: shuffle(items),
+          var wrong = X.miss >= 2 || !X.typedOk;
+          X.answered++;
+          if (wrong) X.wrong.add(f.en);
+          exRecord("fix", f.en, wrong);
+          X.step = 3;
+          drawX();
+          speak(fixSentence(f, true), false);
+        }
+        function fixNext() {
+          X.i++;
+          X.step = 1;
+          X.miss = 0;
+          X.missSet = new Set();
+          X.typedOk = false;
+          drawX();
+        }
+
+        /* Ситуації: що б ти сказав? */
+        function buildSit() {
+          var ps = poolSet();
+          var items = ordered(
+            "sit",
+            SITS.filter(function (s) {
+              return ps.has(s.en);
+            }),
+            function (s) {
+              return s.en;
+            },
+          ).map(function (s) {
+            return { s: s, opts: shuffle(s.opts) };
+          });
+          return mk(
+            "sit",
+            items,
+            function (it) {
+              return it.s.en;
+            },
+            { pick: -1, showUk: false },
+          );
+        }
+        function drawSit() {
+          var b = $("#exBody"),
+            n = X.items.length,
+            it = X.items[X.i],
+            s = it.s;
+          var opts = it.opts
+            .map(function (o, i) {
+              var cls = "opt";
+              if (X.checked) {
+                if (o === s.ok) cls += " good";
+                else if (i === X.pick) cls += " wrong";
+              }
+              return (
+                '<button class="' +
+                cls +
+                '" data-act="sopt" data-i="' +
+                i +
+                '"' +
+                (X.checked ? " disabled" : "") +
+                ">" +
+                esc(o) +
+                "</button>"
+              );
+            })
+            .join("");
+          b.innerHTML =
+            '<div class="panel">' +
+            qmeta(
+              "Питання " + (X.i + 1) + " з " + n + " · Що б ти сказав(ла)?",
+            ) +
+            '<div class="sit-box"><p class="sit-text">' +
+            esc(s.sit) +
+            '</p><p class="sit-uk"' +
+            (X.showUk ? "" : " hidden") +
+            ">" +
+            esc(s.uk) +
+            "</p></div>" +
+            '<div class="play"><button class="btn btn-plain btn-sm" data-act="sshow">' +
+            (X.showUk ? "Сховати переклад" : "Показати переклад") +
+            '</button><button class="btn btn-k btn-sm" data-act="ssay">Прослухати</button></div>' +
+            '<div class="opts">' +
+            opts +
+            "</div>" +
+            (X.checked
+              ? '<div class="row"><button class="btn btn-k btn-sm" data-act="sokay">Прослухати відповідь</button><button class="btn btn-dark" data-act="snext">' +
+                (X.i + 1 >= n ? "Результат" : "Далі") +
+                "</button></div>"
+              : "") +
+            "</div>";
+        }
+        function sitPick(i) {
+          if (X.checked) return;
+          var it = X.items[X.i],
+            ok = it.opts[i] === it.s.ok;
+          X.checked = true;
+          X.pick = i;
+          X.answered++;
+          if (!ok) X.wrong.add(it.s.en);
+          exRecord("sit", it.s.en, !ok);
+          drawX();
+          speak(it.s.ok, false);
+        }
+        function sitNext() {
+          X.i++;
+          X.checked = false;
+          X.pick = -1;
+          X.showUk = false;
+          drawX();
+        }
+
+        /* Категорії: дошки до 8 фраз з одного уроку */
+        function buildSort() {
+          var pool = ordered("sort", exPool(), function (c) {
+            return c.en;
+          });
+          var byL = {},
+            boards = [];
+          pool.forEach(function (c) {
+            (byL[c.lesson] = byL[c.lesson] || []).push(c);
+          });
+          Object.keys(byL).forEach(function (l) {
+            var list = byL[l],
+              byK = {};
+            list.forEach(function (c) {
+              var k = c.kind || "R";
+              (byK[k] = byK[k] || []).push(c);
+            });
+            var ks = Object.keys(byK);
+            for (var B = Math.max(1, Math.ceil(list.length / 8)); ; B++) {
+              var bs = [];
+              for (var i = 0; i < B; i++) bs.push([]);
+              ks.forEach(function (k) {
+                var a = byK[k],
+                  len = a.length;
+                for (var j = 0; j < B; j++)
+                  bs[j] = bs[j].concat(
+                    a.slice(
+                      Math.floor((len * j) / B),
+                      Math.floor((len * (j + 1)) / B),
+                    ),
+                  );
+              });
+              var mx = Math.max.apply(
+                null,
+                bs.map(function (x) {
+                  return x.length;
+                }),
+              );
+              if (mx <= 8 || B >= list.length) {
+                bs.forEach(function (x) {
+                  if (x.length)
+                    boards.push({
+                      lesson: l,
+                      items: x.map(function (c) {
+                        return c.en;
+                      }),
+                    });
+                });
+                break;
+              }
+            }
+          });
+          var x = mk(
+            "sort",
+            pool,
+            function (c) {
+              return c.en;
+            },
+            { boards: boards, b: 0, score: 0, total: 0, badS: [], cur: null },
+          );
+          if (boards.length) setSortBoard(x);
+          return x;
+        }
+        function setSortBoard(x) {
+          x.cur = {
+            items: shuffle(x.boards[x.b].items),
             placed: {},
             selP: null,
             checked: false,
           };
         }
-        function catOf(s, p) {
-          var r = "";
-          Object.keys(s.cats).forEach(function (k) {
-            if (s.cats[k].indexOf(p) >= 0) r = k;
-          });
-          return r;
-        }
         function drawSort() {
-          var b = $("#exBody");
-          if (!X.sets.length) {
-            b.innerHTML = emptyEx();
-            return;
-          }
-          if (X.i >= X.sets.length) {
-            var list = X.bad
-              .map(function (x) {
-                return (
-                  "<li><b>" +
-                  esc(x.p) +
-                  "</b><span>" +
-                  esc(x.cat) +
-                  "</span></li>"
-                );
-              })
-              .join("");
-            b.innerHTML =
-              '<div class="panel"><h2>Категорії: результат</h2><div class="score">' +
-              X.score +
-              "<small> / " +
-              X.total +
-              "</small></div>" +
-              (X.bad.length
-                ? '<span class="label">Куди належали фрази</span><ul class="list">' +
-                  list +
-                  "</ul>"
-                : '<p class="muted">Без помилок. Чудово!</p>') +
-              '<div class="row"><button class="btn btn-plain" data-act="exagain">Ще раз</button></div></div>';
-            return;
-          }
-          var s = X.sets[X.i],
+          var b = $("#exBody"),
+            bd = X.boards[X.b],
             cur = X.cur,
-            last = X.i + 1 >= X.sets.length;
+            last = X.b + 1 >= X.boards.length;
+          var kinds = KINDS.map(function (k) {
+            return k[0];
+          }).filter(function (k) {
+            return bd.items.some(function (en) {
+              return BY.get(en).kind === k;
+            });
+          });
           var pool = cur.items.filter(function (p) {
             return !(p in cur.placed);
           });
           function chip(p, act, extra) {
             var cls = "schip";
             if (cur.checked) {
-              cls += cur.placed[p] === catOf(s, p) ? " good" : " wrong";
+              cls += cur.placed[p] === BY.get(p).kind ? " good" : " wrong";
             } else if (cur.selP === p) cls += " sel";
             return (
               '<button class="' +
@@ -3121,16 +5238,17 @@
               "</button>"
             );
           }
-          var bins = Object.keys(s.cats)
+          var bins = kinds
             .map(function (k) {
               var inside = cur.items
                 .filter(function (p) {
                   return cur.placed[p] === k;
                 })
                 .map(function (p) {
+                  var real = BY.get(p).kind;
                   var extra =
-                    cur.checked && cur.placed[p] !== catOf(s, p)
-                      ? "<small>→ " + esc(catOf(s, p)) + "</small>"
+                    cur.checked && real !== k
+                      ? "<small>→ " + esc(kindName(real)) + "</small>"
                       : "";
                   return chip(p, "sunplace", extra);
                 })
@@ -3139,9 +5257,9 @@
                 '<div class="bin' +
                 (cur.selP && !cur.checked ? " armed" : "") +
                 '" data-act="sbin" data-cat="' +
-                esc(k) +
+                k +
                 '" role="button" tabindex="0"><span class="bin-name">' +
-                esc(k) +
+                esc(kindName(k)) +
                 '</span><div class="bin-items">' +
                 inside +
                 "</div></div>"
@@ -3149,11 +5267,18 @@
             })
             .join("");
           b.innerHTML =
-            '<div class="panel"><div class="q-meta"><span>' +
-            esc(s.title) +
-            " · " +
-            esc(s.lesson) +
-            "</span><span>Торкнись фрази, потім групи</span></div>" +
+            '<div class="panel">' +
+            qmeta(
+              "Дошка " +
+                (X.b + 1) +
+                " з " +
+                X.boards.length +
+                " · " +
+                esc(bd.lesson) +
+                " · фраз: " +
+                bd.items.length,
+            ) +
+            '<p class="muted">Торкнись фрази, потім групи.</p>' +
             '<div class="pool">' +
             (pool.length
               ? pool
@@ -3173,20 +5298,22 @@
             "</button></div></div>";
         }
         function sortCheck() {
-          var s = X.sets[X.i],
-            cur = X.cur;
+          var cur = X.cur;
           if (cur.checked) {
-            X.i++;
-            if (X.i < X.sets.length) newSortSet();
+            X.b++;
+            if (X.b < X.boards.length) setSortBoard(X);
             drawX();
             return;
           }
           cur.checked = true;
           cur.items.forEach(function (p) {
+            var real = BY.get(p).kind,
+              ok = cur.placed[p] === real;
             X.total++;
-            var right = catOf(s, p);
-            if (cur.placed[p] === right) X.score++;
-            else X.bad.push({ p: p, cat: right });
+            X.answered++;
+            if (ok) X.score++;
+            else X.badS.push({ en: p, a: p, b: kindName(real) });
+            exRecord("sort", p, !ok);
           });
           drawX();
         }
@@ -3279,12 +5406,29 @@
               X = null;
               renderEx();
               break;
+            case "xstart":
+              if (X) {
+                X.started = true;
+                drawX();
+              }
+              break;
+            case "endround":
+              if (X) {
+                X.over = true;
+                drawX();
+              }
+              break;
             case "pm":
               if (X && X.type === "pairs")
                 pairClick(
                   t.getAttribute("data-side"),
                   t.getAttribute("data-en"),
                 );
+              break;
+            case "pnext":
+              X.b++;
+              if (X.b < X.boards.length) setBoard(X);
+              drawX();
               break;
             case "hint": {
               var c = X.items[X.i],
@@ -3310,9 +5454,11 @@
             case "qopt":
               if (!X.checked) {
                 X.checked = true;
+                X.answered++;
                 X.pick = +t.getAttribute("data-i");
                 var q = X.items[X.i];
                 if (!q.opts[X.pick].ok) X.wrong.add(q.c.en);
+                exRecord("quiz", q.c.en, !q.opts[X.pick].ok);
                 drawX();
               }
               break;
@@ -3333,6 +5479,34 @@
             case "fcheck":
               forkCheck();
               break;
+            case "fxpart":
+              fixPart(+t.getAttribute("data-i"));
+              break;
+            case "fxcheck":
+              fixCheck();
+              break;
+            case "fxnext":
+              fixNext();
+              break;
+            case "fxsay":
+              speak(fixSentence(X.items[X.i], true), false);
+              break;
+            case "sopt":
+              sitPick(+t.getAttribute("data-i"));
+              break;
+            case "snext":
+              sitNext();
+              break;
+            case "sshow":
+              X.showUk = !X.showUk;
+              drawX();
+              break;
+            case "ssay":
+              speak(X.items[X.i].s.sit, false);
+              break;
+            case "sokay":
+              speak(X.items[X.i].s.ok, false);
+              break;
             case "schip":
               if (!X.cur.checked) {
                 X.cur.selP =
@@ -3344,7 +5518,10 @@
               break;
             case "sunplace":
               if (!X.cur.checked) {
-                delete X.cur.placed[t.getAttribute("data-p")];
+                var home = t.closest(".bin");
+                if (X.cur.selP && home) {
+                  X.cur.placed[X.cur.selP] = home.getAttribute("data-cat");
+                } else delete X.cur.placed[t.getAttribute("data-p")];
                 X.cur.selP = null;
                 drawX();
               }
@@ -3405,7 +5582,8 @@
         $("#view").addEventListener("keydown", function (e) {
           if (e.key === "Enter" && e.target.id === "xIn") {
             e.preventDefault();
-            textCheck();
+            if (X && X.type === "fix") fixCheck();
+            else textCheck();
             return;
           }
           if (e.key === "Enter" && e.target.id === "card") {
@@ -3479,6 +5657,7 @@
               JSON.stringify({
                 v: 1,
                 cards: DB.cards,
+                ex: DB.ex,
                 session: DB.session,
                 prefs: {
                   lessons: P.lessons,
@@ -3538,6 +5717,7 @@
             if (!o || o.v !== 1 || !o.cards || typeof o.cards !== "object")
               throw new Error("data");
             DB.cards = o.cards;
+            DB.ex = o.ex && typeof o.ex === "object" ? o.ex : {};
             DB.session =
               o.session && typeof o.session === "object" ? o.session : null;
             if (o.prefs && typeof o.prefs === "object") {
@@ -3581,6 +5761,7 @@
           b.textContent = "Скинути прогрес";
           b.classList.remove("btn-danger");
           DB.cards = {};
+          DB.ex = {};
           DB.session = null;
           X = null;
           ensureSession(true);
